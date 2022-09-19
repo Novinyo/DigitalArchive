@@ -15,17 +15,25 @@ export const getSchool = createAsyncThunk('setupApp/getSchool', async (schoolId)
 
 export const saveSchool = createAsyncThunk(
   'setupApp/saveSchool',
-  async (typeData, { dispatch, getState }) => {
+  async (data, { dispatch, getState }) => {
     const { id } = getState().setupApp;
 
     const scData = {
-      code: typeData.code,
-      name: typeData.name,
-      description: typeData.description,
-      Active: typeData.active,
+      code: data.code.trim().toUpperCase(),
+      name: data.name.trim(),
+      description: data.description.trim(),
+      schoolTypeId: data.schoolTypeId,
+      Active: data.active,
     };
+    console.log(scData);
     try {
-      const response = await axios.post(`/api/schools`, scData);
+      const response =
+        data.id === null
+          ? await axios.post(`/api/schools`, scData)
+          : await axios.put(`api/schools/${data.id}`, scData);
+
+      console.log(response);
+
       return response.data;
     } catch (error) {
       console.log(error.response);

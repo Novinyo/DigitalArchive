@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Common;
 using Application.Schools;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,6 +39,13 @@ namespace API.Controllers
         public async Task<IActionResult> GetSchoolById(Guid id, CancellationToken ct)
         {
             var result = await Mediator.Send(new Details.Query { Id = id }, ct);
+
+            return HandleResult(result);
+        }
+          [HttpGet("exists")]
+        public async Task<IActionResult> SchoolExists([FromQuery] DuplicateVm query)
+        {
+            var result = await Mediator.Send(new CheckDuplicateSchool.Query { ToCheck  = query });
 
             return HandleResult(result);
         }

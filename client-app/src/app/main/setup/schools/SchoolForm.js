@@ -15,6 +15,7 @@ function SchoolForm(props) {
   const { errors } = formState;
   const [loading, setLoading] = useState(true);
   const [schoolTypes, setSchoolTypes] = useState([]);
+  const { handleDuplicate } = props;
 
   useEffect(() => {
     dispatch(getSchoolTypes(true)).then((action) => {
@@ -53,6 +54,9 @@ function SchoolForm(props) {
               labelid="lblCode"
               id="code"
               variant="outlined"
+              onBlur={() => {
+                handleDuplicate('code', field.value);
+              }}
               fullWidth
             />
           </>
@@ -74,6 +78,9 @@ function SchoolForm(props) {
               labelid="lblName"
               id="name"
               variant="outlined"
+              onBlur={() => {
+                handleDuplicate('name', field.value);
+              }}
               fullWidth
             />
           </>

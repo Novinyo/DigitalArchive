@@ -12,11 +12,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import _ from '@lodash';
+import clsx from 'clsx';
 import FuseLoading from '@fuse/core/FuseLoading';
 import { getSchool, newSchool, resetSchool, selectSchool } from '../store/schoolSlice';
 import reducer from '../store';
-import TypeHeader from './type/TypeHeader';
+import SchoolHeader from './SchoolHeader';
 import SchoolForm from './SchoolForm';
+import setupService from '../services/schoolService/setupService';
 /**
  * Form Validation Schema
  */
@@ -51,7 +53,7 @@ function SchoolPage(props) {
     defaultValues: {},
     resolver: yupResolver(schema),
   });
-  const { reset, watch, control, onChange, formState } = methods;
+  const { reset, watch, control, onChange, setError, formState } = methods;
   const { errors } = formState;
   const form = watch();
 
@@ -72,6 +74,30 @@ function SchoolPage(props) {
 
     updateSchoolState();
   }, [dispatch, routeParams]);
+
+  const handleDuplicate = (type, value) => {
+    if (value.trim().length > 2) {
+      setupService
+        .checkSchool(school.id, type, value)
+        .then((res) => {
+          if (res.data) {
+            schema.canSave = false;
+            setError(type, {
+              type: 'manual',
+              message: `School ${type} already exists`,
+            });
+          }
+        })
+        .catch((_errors) => {
+          _errors.forEach((error) => {
+            setError(type, {
+              type: 'manual',
+              message: error.message,
+            });
+          });
+        });
+    }
+  };
 
   useEffect(() => {
     console.log(school);
@@ -108,7 +134,28 @@ function SchoolPage(props) {
       </motion.div>
     );
   }
+  /**
+   * Display error if app crash
+   */
+  if (form?.status >= 400) {
+    const data = JSON.parse(form.config.data);
 
+    return (
+      <div className={clsx('flex flex-1 flex-col items-center justify-center p-24')}>
+        <Typography sx={{ color: 'red' }}>{form?.data.title}</Typography>
+        <Button
+          className="whitespace-nowrap mx-4"
+          variant="contained"
+          sx={{ backgroundColor: 'red', color: 'white' }}
+          onClick={() => {
+            dispatch(newSchool());
+          }}
+        >
+          Refresh
+        </Button>
+      </div>
+    );
+  }
   if (
     _.isEmpty(form) ||
     (school && routeParams.schoolId !== school.id && routeParams.schoolId !== 'new')
@@ -118,11 +165,11 @@ function SchoolPage(props) {
   return (
     <FormProvider {...methods}>
       <FusePageCarded
-        header={<TypeHeader returnURL="schools" title="School" />}
+        header={<SchoolHeader />}
         content={
           <div className="p-16 sm:p-24 max-w-3xl">
             <div className="p-16 sm:p-24 max-w-3xl">
-              <SchoolForm />
+              <SchoolForm handleDuplicate={handleDuplicate} />
             </div>
           </div>
         }

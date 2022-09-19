@@ -1,7 +1,7 @@
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import FusePageCarded from '@fuse/core/FusePageCarded';
 import withReducer from 'app/store/withReducer';
-import SchoolsHeader from './SchoolHeader';
+import SchoolsHeader from './SchoolsHeader';
 import SchoolsTable from './SchoolsTable';
 import reducer from '../store';
 

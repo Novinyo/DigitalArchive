@@ -115,8 +115,6 @@ function SchoolType(props) {
     reset(schoolType);
   }, [schoolType, reset]);
 
-  useEffect(() => {});
-
   useEffect(() => {
     return () => {
       /**
@@ -151,15 +149,12 @@ function SchoolType(props) {
       </motion.div>
     );
   }
-
   /**
-   * Wait while product data is loading and form is setted
+   * Display error if app crash
    */
   if (form?.status >= 400) {
     const data = JSON.parse(form.config.data);
 
-    // schoolType = data;
-    // form = data;
     return (
       <div className={clsx('flex flex-1 flex-col items-center justify-center p-24')}>
         <Typography sx={{ color: 'red' }}>{form?.data.title}</Typography>
@@ -176,6 +171,10 @@ function SchoolType(props) {
       </div>
     );
   }
+  /**
+   * Wait while product data is loading and form is setted
+   */
+
   if (
     _.isEmpty(form) ||
     (schoolType && routeParams.schoolTypeId !== schoolType.id && routeParams.schoolTypeId !== 'new')
