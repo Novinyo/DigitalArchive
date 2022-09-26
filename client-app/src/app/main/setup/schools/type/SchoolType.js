@@ -141,7 +141,7 @@ function SchoolType(props) {
           className="mt-24"
           component={Link}
           variant="outlined"
-          to="/schooltypes"
+          to="/setup/schooltypes"
           color="inherit"
         >
           Go to School types Page
@@ -184,7 +184,7 @@ function SchoolType(props) {
   return (
     <FormProvider {...methods}>
       <FusePageCarded
-        header={<TypeHeader returnURL="schooltypes" title="School type" />}
+        header={<TypeHeader returnURL="setup/schooltypes" title="School type" />}
         content={
           <div className="p-16 sm:p-24 max-w-3xl">
             <SchoolTypeForm handleDuplicate={handleDuplicate} />

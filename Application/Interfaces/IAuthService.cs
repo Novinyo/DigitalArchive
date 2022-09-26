@@ -16,5 +16,7 @@ namespace Application.Interfaces
         Task<UserResponseDto> ChangePasswordAsync(AuthPassDto request);
 
         Task<UserDto> GetCurrentUser(string emailClaim);
+
+        Task<List<RoleDto>> GetRoles();
     }
 }

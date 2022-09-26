@@ -12,7 +12,7 @@ namespace Domain
         public DateTime DOB { get; set; }
         public DateTime DateJoined { get; set; }
         public DateTime? DateLeft { get; set; }
-        public EntityType StaffType { get; set; }
+        public StaffType StaffType { get; set; }
         public School School { get; set; }
         public Guid SchoolId { get; set; }
         public AppUser User { get; set; }

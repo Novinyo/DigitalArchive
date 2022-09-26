@@ -9,6 +9,7 @@ namespace Application.Common
     {
         public string Type { get; set; }
         public string Value { get; set; }
+        public Guid? SchoolId { get; set; }
         public Guid? Id { get; set; }
     }
 }

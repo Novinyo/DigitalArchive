@@ -44,24 +44,6 @@ namespace Persistence
                 await userManager.CreateAsync(admin, "Demo@12345_");
                 var roles = systemRoles();
                 await userManager.AddToRolesAsync(admin, roles);
-
-                var users = new List<AppUser>
-                {
-                    new AppUser {FirstName = "Leonard", LastName="Novinyo", UserName = "leo", Email = "leo@test.com"},
-                    new AppUser {FirstName = "Samson",LastName="Gadagbui", UserName = "samson", Email = "samson@test.com"},
-                    new AppUser {FirstName = "Alexander",LastName="Marcos", UserName = "xander", Email = "xander@test.com"},
-                };
-
-                foreach (var user in users)
-                {
-                    user.CreatedAt = DateTime.UtcNow;
-                    user.CreatedBy = admin.Id;
-
-                    if (user.UserName == "samson")
-                        await userManager.CreateAsync(user);
-                    else
-                        await userManager.CreateAsync(user, "Demo@123");
-                }
             }
         }
 

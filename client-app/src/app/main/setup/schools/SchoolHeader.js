@@ -23,7 +23,7 @@ function SchoolHeader(props) {
     dispatch(saveSchool(getValues())).then((x) => {
       console.log(x);
       if (_.isEmpty(x.payload)) {
-        navigate('/schools');
+        navigate('/setup/schools');
       }
     });
   }
@@ -39,7 +39,7 @@ function SchoolHeader(props) {
             className="flex items-center sm:mb-12"
             component={Link}
             role="button"
-            to="/schools"
+            to="/setup/schools"
             color="inherit"
           >
             <FuseSvgIcon size={20}>

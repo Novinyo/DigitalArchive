@@ -11,7 +11,7 @@ namespace Domain
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public EntityType StudentType { get; set; }
+        public StaffType StudentType { get; set; }
         public Guid StudentTypeId { get; set; }
         public int Gender { get; set; }
         public string FatherName { get; set; }

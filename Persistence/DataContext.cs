@@ -19,10 +19,11 @@ namespace Persistence
        public DbSet<DocumentType> DocumentTypes { get; set; }
        public DbSet<Document> Documents { get; set; }
         public DbSet<SchoolType> SchoolTypes { get; set; }
-        public DbSet<EntityType> EntityTypes { get; set; }
+        public DbSet<StaffType> StaffTypes { get; set; }
         public DbSet<School> Schools { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<Student> Students { get; set; }
+        public DbSet<StudentType> StudentTypes { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         
         protected override void OnModelCreating(ModelBuilder builder)

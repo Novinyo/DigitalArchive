@@ -1,33 +1,7 @@
-import { lazy } from 'react';
-import { Navigate } from 'react-router-dom';
+import StaffsAppConfig from './staffs/StaffsAppConfig';
+import SchoolsAppConfig from './schools/SchoolsAppConfig';
+import ContactsAppConfig from './contacts/ContactsAppConfig';
 
-const School = lazy(() => import('./schools/School'));
-const Schools = lazy(() => import('./schools/Schools'));
-const SchoolType = lazy(() => import('./schools/type/SchoolType'));
-const SchoolTypes = lazy(() => import('./schools/type/SchoolTypes'));
-
-const SetupConfig = {
-  settings: {
-    layout: {},
-  },
-  routes: [
-    {
-      path: 'schools',
-      element: <Schools />,
-    },
-    {
-      path: 'schools/:schoolId/*',
-      element: <School />,
-    },
-    {
-      path: 'schooltypes',
-      element: <SchoolTypes />,
-    },
-    {
-      path: 'schooltypes/:schoolTypeId/*',
-      element: <SchoolType />,
-    },
-  ],
-};
+const SetupConfig = [SchoolsAppConfig, StaffsAppConfig, ContactsAppConfig];
 
 export default SetupConfig;

@@ -55,7 +55,7 @@ function SchoolTypesHeader(props) {
           <Button
             className=""
             component={Link}
-            to="/schooltypes/new"
+            to="/setup/schooltypes/new"
             variant="contained"
             color="secondary"
             startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}

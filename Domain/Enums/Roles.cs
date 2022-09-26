@@ -6,6 +6,8 @@ namespace Domain.Enums
 {
     public enum Roles
     {
+        [StringValue("Super Admin")]
+        SuperAdmin,
         [StringValue("System Admin")]
         Admin,
 

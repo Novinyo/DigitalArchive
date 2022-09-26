@@ -21,7 +21,6 @@ function TypeHeader(props) {
   const { schoolTypeId } = routeParams;
   function handleSaveType() {
     dispatch(saveSchoolType(getValues())).then((x) => {
-      console.log(x);
       if (_.isEmpty(x.payload)) {
         navigate(`/${returnURL}`);
       }

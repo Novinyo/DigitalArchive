@@ -9,7 +9,7 @@ import { useRef, useState } from 'react';
 
 function SchoolsHeader(props) {
   const [searchText, setSearchText] = useState('');
-  const { title, newLink } = props;
+  const { title } = props;
   const titles = useRef(title.split(' '));
 
   return (
@@ -55,7 +55,7 @@ function SchoolsHeader(props) {
           <Button
             className=""
             component={Link}
-            to={newLink}
+            to="/setup/schools/new"
             variant="contained"
             color="secondary"
             startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}

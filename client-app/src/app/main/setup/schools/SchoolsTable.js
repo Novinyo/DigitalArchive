@@ -74,7 +74,7 @@ function SchoolsTable(props) {
   }
 
   function handleClick(item) {
-    props.navigate(`/schools/${item.id}`);
+    props.navigate(`/setup/schools/${item.id}`);
   }
 
   function handleCheck(event, id) {

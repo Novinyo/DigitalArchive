@@ -128,7 +128,13 @@ function SchoolPage(props) {
         <Typography color="text.secondary" variant="h5">
           There is no such school!
         </Typography>
-        <Button className="mt-24" component={Link} variant="outlined" to="/schools" color="inherit">
+        <Button
+          className="mt-24"
+          component={Link}
+          variant="outlined"
+          to="/setup/schools"
+          color="inherit"
+        >
           Go to Schools Page
         </Button>
       </motion.div>

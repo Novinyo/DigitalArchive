@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Schools;
 
 namespace Application.Authentication
 {
@@ -23,10 +24,11 @@ namespace Application.Authentication
     {
         public string DisplayName { get; set; }
         public string Email { get; set; }
-       // public string Username { get; set; }
+        public string Username { get; set; }
         public string PhotoURL { get; set; }
         public Settings Settings { get; set; }
         public string[] Shortcuts { get; set; }
+        public UserSchoolDto School { get; set; }
     }
 
     public class Settings
@@ -38,7 +40,6 @@ namespace Application.Authentication
     public class Layout
     {
     }
-
     public class Theme
     {
     }

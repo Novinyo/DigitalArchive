@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common;
+using Application.Common.Dtos;
 using Application.Schools;
 using Application.Schools.Type;
+using Application.Staffs.Dtos;
 using AutoMapper;
 using Domain;
 
@@ -15,28 +17,43 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<SchoolType, CommonDto>()
-           // .ForMember(dto => dto.IsActive, s => s.MapFrom(t => t.Active))
             .ReverseMap();
 
              CreateMap<DocumentType, CommonDto>()
-           // .ForMember(dto => dto.IsActive, s => s.MapFrom(t => t.Active))
             .ReverseMap();
 
-            CreateMap<EntityType, CommonDto>()
-            //.ForMember(dto => dto.IsActive, s => s.MapFrom(t => t.Active))
-            .ReverseMap();
+            CreateMap<StaffType, EntityTypeDto>();
+           // .ForMember(dto => dto.SchoolName, s => s.MapFrom(t => t.School.Name));
+            
+             CreateMap<EntityTypeAddDto, StaffType>();
 
-            CreateMap<StudentType, CommonDto>()
-            //.ForMember(dto => dto.IsActive, s => s.MapFrom(t => t.Active))
-            .ReverseMap();
+            CreateMap<StudentType, EntityTypeDto>()
+            .ForMember(dto => dto.SchoolName, s => s.MapFrom(t => t.School.Name));
+            
+            CreateMap<EntityTypeAddDto, StudentType>();
+
+            CreateMap<AppUser, UserStaffDto>();
+
+            CreateMap<Staff, Staffs.StaffRDto>()
+            .ForMember(s => s.SchoolId, sr => sr.MapFrom(s => s.School.Id))
+            .ForMember(s => s.SchoolName, sr => sr.MapFrom(s => s.School.Name))
+            .ForMember(s => s.StaffTypeName, sr => sr.MapFrom(s => s.StaffType.Name))
+            .ForMember(s => s.StaffTypeId, sr => sr.MapFrom(s => s.StaffType.Id));
 
             CreateMap<School, SchoolDto>()
-           // .ForMember(dto => dto.IsActive, s => s.MapFrom(s => s.Active))
             .ForMember(dto => dto.SchoolTypeId, s => s.MapFrom(s => s.SchoolType.Id))
             .ForMember(dto => dto.SchoolTypeName, s => s.MapFrom(s => s.SchoolType.Name));
 
+            CreateMap<School, UserSchoolDto>()
+            .ForMember(u => u.SchoolId, s => s.MapFrom(s => s.Id));
+
             CreateMap<AddSchoolDto, School>();
-         // .ForMember(dto => dto.Active, s => s.MapFrom(s => s.IsActive));
+
+            CreateMap<UserWDto, AppUser>().
+            ForMember(a => a.UserName, u => u.MapFrom(u => u.Username))
+            .ForMember(a => a.ProfilePicture, u => u.MapFrom(u => u.Avatar));
+
+            CreateMap<StaffWDto, Staff>();
         }
     }
 }

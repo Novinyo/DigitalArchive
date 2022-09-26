@@ -6,18 +6,10 @@ import SignInConfig from '../main/sign-in/SignInConfig';
 import SignUpConfig from '../main/sign-up/SignUpConfig';
 import SignOutConfig from '../main/sign-out/SignOutConfig';
 import Error404Page from '../main/404/Error404Page';
-import ExampleConfig from '../main/example/ExampleConfig';
 import HomeConfig from '../main/home/HomeConfig';
 import SetupConfig from '../main/setup/setupConfig';
 
-const routeConfigs = [
-  ExampleConfig,
-  HomeConfig,
-  SetupConfig,
-  SignOutConfig,
-  SignInConfig,
-  SignUpConfig,
-];
+const routeConfigs = [HomeConfig, ...SetupConfig, SignOutConfig, SignInConfig, SignUpConfig];
 
 const routes = [
   ...FuseUtils.generateRoutesFromConfigs(routeConfigs, settingsConfig.defaultAuth),

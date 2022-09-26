@@ -6,12 +6,13 @@ using Application.Interfaces;
 using Application.Core;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController:ControllerBase
+    public class AccountController : ControllerBase
     {
         private readonly IAuthService _authService;
 
@@ -19,7 +20,7 @@ namespace API.Controllers
         {
             _authService = authService;
         }
-        
+
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<Result<UserDto>>> Login(LoginDto login)
@@ -34,18 +35,26 @@ namespace API.Controllers
             return await _authService.RegisterAsync(user);
         }
 
-         [HttpPost("changepassword")]
+        [HttpPost("changepassword")]
         public async Task<ActionResult<UserResponseDto>> ChangePassword(AuthPassDto request)
         {
             return await _authService.ChangePasswordAsync(request);
         }
 
-         [HttpGet("currentuser")]
+        [HttpGet("currentuser")]
+        [Authorize]
         public async Task<ActionResult<UserDto>> GetCurrentUser()
         {
             var claim = User.FindFirstValue(ClaimTypes.Email);
 
             return await _authService.GetCurrentUser(claim);
+        }
+
+        [HttpGet("loadroles")]
+        [Authorize(Roles = "SuperAdmin, Admin")]
+        public async Task<ActionResult<List<RoleDto>>> LoadRoles()
+        {
+            return await _authService.GetRoles();
         }
     }
 }

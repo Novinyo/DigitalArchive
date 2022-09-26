@@ -1,9 +1,12 @@
 import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getSchools = createAsyncThunk('setupApp/getSchools', async () => {
+export const getSchools = createAsyncThunk('setupApp/getSchools', async (active) => {
   try {
-    const response = await axios.get('/api/Schools/schools');
+    // const response = await axios.get('/api/Schools/schools');
+    const response = active
+      ? await axios.get('/api/Schools/activeschools')
+      : await axios.get('/api/Schools/schools');
     return response.data;
   } catch (error) {
     return {
