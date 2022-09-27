@@ -8,7 +8,7 @@ namespace Application.Staffs.Dtos
 {
     public class UserWDto
     {
-        public byte[] Avatar { get; set; }
+        public string Avatar { get; set; }
         [Required]
         public string Username { get; set; }
          [Required]

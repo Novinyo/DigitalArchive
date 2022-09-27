@@ -9,8 +9,8 @@ namespace Application.Staffs
     public class StaffRDto
     {
          public Guid Id { get; set; }
-        public string Code { get; set; }
-        public DateTime DOB { get; set; }
+        public string Title { get; set; }
+        public DateTime Birthdate { get; set; }
         public DateTime DateJoined { get; set; }
         public DateTime? DateLeft { get; set; }
         public string StaffTypeName { get; set; }

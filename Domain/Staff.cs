@@ -13,6 +13,7 @@ namespace Domain
         public DateTime DateJoined { get; set; }
         public DateTime? DateLeft { get; set; }
         public StaffType StaffType { get; set; }
+        public string Title { get; set; }
         public School School { get; set; }
         public Guid SchoolId { get; set; }
         public AppUser User { get; set; }

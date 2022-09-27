@@ -23,6 +23,7 @@ namespace API.Extensions
         {
 
             services.Configure<JwtSettings>(config.GetSection("JwtSettings"));
+            services.Configure<CustomSettings>(config.GetSection("CustomSettings"));
               services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = true;

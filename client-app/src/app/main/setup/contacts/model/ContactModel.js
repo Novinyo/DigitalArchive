@@ -20,6 +20,7 @@ const ContactModel = (data) =>
     medicalNotes: '',
     staffTypeId: '',
     schoolId: '',
+    roles: [],
   });
 
 export default ContactModel;

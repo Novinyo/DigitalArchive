@@ -7,12 +7,11 @@ export const getRoles = createAsyncThunk(
     const response = await axios.get('/api/account/loadroles');
 
     const data = await response.data;
-    const types = data.map((x) => {
+    const roles = data.map((x) => {
       return { id: x.id, name: x.name };
     });
-    types.unshift({ id: '', name: 'Please select...' });
 
-    return types;
+    return roles;
   }
 );
 

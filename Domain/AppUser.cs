@@ -12,7 +12,8 @@ namespace Domain
         public string LastName { get; set; }
         public override string PhoneNumber { get; set; }
         public override string Email { get; set; }
-        public byte[] ProfilePicture { get; set; }
+        [MaxLength(400)]
+        public string ProfilePicture { get; set; }
         public bool IsActive { get; set; }
         public bool CanLogin { get; set; }
         public string CreatedBy { get; set; } 

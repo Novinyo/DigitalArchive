@@ -32,10 +32,12 @@ namespace Application.Core
             
             CreateMap<EntityTypeAddDto, StudentType>();
 
-            CreateMap<AppUser, UserStaffDto>();
+            CreateMap<AppUser, UserStaffDto>()
+            .ForMember(x => x.Avatar, u => u.MapFrom(u => u.ProfilePicture));
 
             CreateMap<Staff, Staffs.StaffRDto>()
             .ForMember(s => s.SchoolId, sr => sr.MapFrom(s => s.School.Id))
+            .ForMember(s => s.Birthdate, sr => sr.MapFrom(s => s.DOB))
             .ForMember(s => s.SchoolName, sr => sr.MapFrom(s => s.School.Name))
             .ForMember(s => s.StaffTypeName, sr => sr.MapFrom(s => s.StaffType.Name))
             .ForMember(s => s.StaffTypeId, sr => sr.MapFrom(s => s.StaffType.Id));

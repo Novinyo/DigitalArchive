@@ -16,6 +16,8 @@ namespace Persistence.Configurations
 
              builder.HasIndex(x => new{x.Code, x.SchoolId}).IsUnique();
             builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
+            
+            builder.Property(x => x.Title).HasMaxLength(50).IsRequired().HasDefaultValue("Teacher");
 
             builder.Property(x => x.PostalAddress).HasMaxLength(200);
             builder.Property(x => x.StreetAddress).HasMaxLength(200);

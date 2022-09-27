@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Staffs;
+using Application.Staffs.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -23,12 +24,12 @@ namespace API.Controllers
         }
 
         
-        // [HttpPost]
-        // public async Task<IActionResult> AddStaff(EntityTypeAddDto entityType, CancellationToken ct)
-        // {
-        //     var result = await Mediator.Send(new Create.Command { StaffType = entityType }, ct);
+        [HttpPost]
+        public async Task<IActionResult> AddStaff(StaffWDto entityType, CancellationToken ct)
+        {
+            var result = await Mediator.Send(new Create.Command { Staff = entityType }, ct);
 
-        //     return HandleResult(result);
-        // }
+            return HandleResult(result);
+        }
     }
 }

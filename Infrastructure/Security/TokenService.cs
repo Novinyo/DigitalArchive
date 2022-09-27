@@ -19,7 +19,8 @@ namespace Infrastructure.Security
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public TokenService(IOptions<JwtSettings> jwtSettings, UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
+        public TokenService(IOptions<JwtSettings> jwtSettings, UserManager<AppUser> userManager,
+         RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -39,11 +40,11 @@ namespace Infrastructure.Security
                 roleClaims.Add(new Claim("roles", role));
 
                 var rl = await _roleManager.FindByNameAsync(role);
-                if(rl != null)
-                {
-                    var permissions = await _roleManager.GetClaimsAsync(rl);
-                    permissionClaims.AddRange(permissions);
-                }
+                // if(rl != null)
+                // {
+                //     var permissions = await _roleManager.GetClaimsAsync(rl);
+                //     permissionClaims.AddRange(permissions);
+                // }
             }
 
             var claims = new []
@@ -53,8 +54,8 @@ namespace Infrastructure.Security
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("uid", user.Id)
             }.Union(userClaims)
-            .Union(roleClaims)
-            .Union(permissionClaims);
+            .Union(roleClaims);
+          //  .Union(permissionClaims);
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);

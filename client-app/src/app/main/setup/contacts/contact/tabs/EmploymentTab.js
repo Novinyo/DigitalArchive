@@ -148,13 +148,6 @@ function EmploymentTab(props) {
             helperText={errors?.schoolId?.message}
             variant="outlined"
             fullWidth
-            // InputProps={{
-            //   startAdornment: (
-            //     <InputAdornment position="start">
-            //       <FuseSvgIcon size={20}>heroicons-solid:office-building</FuseSvgIcon>
-            //     </InputAdornment>
-            //   ),
-            // }}
           >
             {schools.map((item) => (
               <MenuItem key={item.id} value={item.id}>

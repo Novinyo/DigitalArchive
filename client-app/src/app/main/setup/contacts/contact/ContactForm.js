@@ -53,6 +53,11 @@ const schema = yup.object().shape({
     .required('You must select a hire date'),
   staffTypeId: yup.string().required('Please select a valid option'),
   schoolId: yup.string().required('Please select a valid school'),
+  // roles: yup.array().of(
+  //   yup.object().shape({
+  //     name: yup.string().required('Kindly select at least one role'),
+  //   })
+  // ),
 });
 
 const ContactForm = (props) => {
@@ -152,7 +157,7 @@ const ContactForm = (props) => {
                     <div>
                       <label htmlFor="button-avatar" className="flex p-8 cursor-pointer">
                         <input
-                          accept="image/*"
+                          accept="image/png, image/jpeg"
                           className="hidden"
                           id="button-avatar"
                           type="file"
@@ -163,10 +168,18 @@ const ContactForm = (props) => {
                                 if (!file) {
                                   return;
                                 }
+                                if (file.type !== 'image/jpeg' && file.type !== 'iamge/png') {
+                                  alert('Only jpeg or png files are allowed');
+                                  return;
+                                }
+                                if (file.size > 5000000) {
+                                  alert('File size cannot exceed 5MB');
+                                  return;
+                                }
                                 const reader = new FileReader();
 
                                 reader.onload = () => {
-                                  resolve(`data:${file.type};base64,${btoa(reader.result)}`);
+                                  resolve(`data:${file.type};base64,${window.btoa(reader.result)}`);
                                 };
 
                                 reader.onerror = reject;
@@ -230,7 +243,7 @@ const ContactForm = (props) => {
             <EmploymentTab staffTypes={tags} schools={schools} />
           </div>
           <div className={tabValue !== 2 ? 'hidden' : ''}>
-            <AdditionalTab contact={contact} />
+            <AdditionalTab roles={roles} />
           </div>
         </div>
         {/*  */}

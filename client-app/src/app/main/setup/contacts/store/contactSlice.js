@@ -23,12 +23,34 @@ export const getContact = createAsyncThunk(
 export const addContact = createAsyncThunk(
   'contactsApp/contacts/addContact',
   async (contact, { dispatch, getState }) => {
-    console.log(contact);
-    // const response = await axios.post('/api/contacts', contact);
+    const staff = {
+      title: contact.title,
+      dob: contact.birthdate,
+      dateJoined: contact.hiredate,
+      staffTypeId: contact.staffTypeId,
+      schoolId: contact.schoolId,
+      user: {
+        avatar: contact.avatar,
+        username: contact.username,
+        firstName: contact.firstName,
+        middleName: contact.middleName,
+        lastName: contact.lastName,
+        email: contact.email,
+        phoneNumber: contact.phoneNumber,
+      },
+      roles: contact.roles,
+      postalAddress: contact.postAddress,
+      streetAddress: contact.streetAddress,
+      haveMedicalCondition: contact.hasMedicalRecord,
+      conditionRemarks: contact.medicalNotes,
+      description: contact.notes,
+    };
 
-    // const data = await response.data;
+    const response = await axios.post('/api/Staff', staff);
 
-    return null; // data;
+    const data = await response.data;
+
+    return data;
   }
 );
 
