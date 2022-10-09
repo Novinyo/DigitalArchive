@@ -4,13 +4,12 @@ import history from '@history';
 import ContactModel from '../model/ContactModel';
 
 export const getContact = createAsyncThunk(
-  'contactsApp/task/getContact',
+  'setupApp/task/getContact',
   async (id, { dispatch, getState }) => {
     try {
       const response = await axios.get(`/api/staff/${id}`);
 
       const data = await response.data;
-
       return data;
     } catch (error) {
       history.push({ pathname: `/setup/contacts` });
@@ -21,12 +20,12 @@ export const getContact = createAsyncThunk(
 );
 
 export const addContact = createAsyncThunk(
-  'contactsApp/contacts/addContact',
+  'setupApp/contacts/addContact',
   async (contact, { dispatch, getState }) => {
     const staff = {
       title: contact.title,
       dob: contact.birthdate,
-      dateJoined: contact.hiredate,
+      dateJoined: contact.dateJoined,
       staffTypeId: contact.staffTypeId,
       schoolId: contact.schoolId,
       user: {
@@ -39,13 +38,12 @@ export const addContact = createAsyncThunk(
         phoneNumber: contact.phoneNumber,
       },
       roles: contact.roles,
-      postalAddress: contact.postAddress,
+      postalAddress: contact.postalAddress,
       streetAddress: contact.streetAddress,
       haveMedicalCondition: contact.hasMedicalRecord,
-      conditionRemarks: contact.medicalNotes,
-      description: contact.notes,
+      conditionRemarks: contact.haveMedicalCondition ? contact.medicalNotes : '',
+      description: contact.description,
     };
-
     const response = await axios.post('/api/Staff', staff);
 
     const data = await response.data;
@@ -55,9 +53,33 @@ export const addContact = createAsyncThunk(
 );
 
 export const updateContact = createAsyncThunk(
-  'contactsApp/contacts/updateContact',
+  'setupApp/contacts/updateContact',
   async (contact, { dispatch, getState }) => {
-    const response = await axios.put(`/api/contacts/${contact.id}`, contact);
+    const staff = {
+      title: contact.title,
+      dob: contact.birthdate,
+      dateJoined: contact.dateJoined,
+      staffTypeId: contact.staffTypeId,
+      schoolId: contact.schoolId,
+      user: {
+        avatar: contact.avatar,
+        username: contact.username,
+        userId: contact.userId,
+        firstName: contact.firstName,
+        middleName: contact.middleName,
+        lastName: contact.lastName,
+        email: contact.email,
+        phoneNumber: contact.phoneNumber,
+      },
+      roles: contact.roles,
+      postalAddress: contact.postalAddress,
+      streetAddress: contact.streetAddress,
+      haveMedicalCondition: contact.hasMedicalRecord,
+      conditionRemarks: contact.hasMedicalRecord ? contact.medicalNotes : '',
+      description: contact.description,
+    };
+    console.log(staff);
+    const response = await axios.put(`/api/staff/${contact.id}`, staff);
 
     const data = await response.data;
 
@@ -66,9 +88,9 @@ export const updateContact = createAsyncThunk(
 );
 
 export const removeContact = createAsyncThunk(
-  'contactsApp/contacts/removeContact',
+  'setupApp/contacts/removeContact',
   async (id, { dispatch, getState }) => {
-    const response = await axios.delete(`/api/contacts/${id}`);
+    const response = await axios.delete(`/api/staff/${id}`);
 
     await response.data;
 
@@ -79,7 +101,7 @@ export const removeContact = createAsyncThunk(
 export const selectContact = ({ contactsApp }) => contactsApp.contact;
 
 const contactSlice = createSlice({
-  name: 'contactsApp/contact',
+  name: 'setupApp/contact',
   initialState: null,
   reducers: {
     newContact: (state, action) => ContactModel(),

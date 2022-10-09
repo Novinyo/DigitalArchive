@@ -87,6 +87,27 @@ const navigationConfig = [
           },
         ],
       },
+      {
+        id: 'docType_el',
+        title: 'Documents',
+        type: 'collapse',
+        subtitle: 'Document types...',
+        icons: 'heroicons-outline:star',
+        children: [
+          {
+            id: 'documenttypes',
+            title: 'Document Types',
+            type: 'item',
+            url: '/setup/documenttypes',
+          },
+          // {
+          //   id: 'staffs',
+          //   title: 'Staffs',
+          //   type: 'item',
+          //   url: '/setup/contacts',
+          // },
+        ],
+      },
     ],
   },
 ];

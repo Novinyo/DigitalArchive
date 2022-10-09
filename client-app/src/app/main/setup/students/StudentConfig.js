@@ -1,7 +1,8 @@
 import { lazy } from 'react';
+import StudentForm from './student/StudentForm';
+import StudentView from './student/StudentView';
 
-const StudentTypePage = lazy(() => import('./StudentTypePage'));
-const StudentPage = lazy(() => import('./StudentPage'));
+const StudentsApp = lazy(() => import('./StudentsApp'));
 
 const StudentConfig = {
   settings: {
@@ -11,15 +12,16 @@ const StudentConfig = {
   },
   routes: [
     {
-      path: 'students',
+      path: 'setup/students',
+      element: <StudentsApp />,
       children: [
         {
-          path: '',
-          element: <StudentPage />,
+          path: ':id',
+          element: <StudentView />,
         },
         {
-          path: 'studenttype',
-          element: <StudentTypePage />,
+          path: ':id/edit',
+          element: <StudentForm />,
         },
       ],
     },

@@ -49,6 +49,7 @@ namespace Application.StaffTypes
                 var staff = await _context.Staffs.FirstOrDefaultAsync(x => x.User.Id == userId);
 
                     Guid? schoolId = staff?.SchoolId != null ? staff.SchoolId : null;
+                    
                 var staffType = await _context.StaffTypes.FirstOrDefaultAsync(x => x.Id == request.StaffType.Id
                 && x.DeletedAt == null);
 

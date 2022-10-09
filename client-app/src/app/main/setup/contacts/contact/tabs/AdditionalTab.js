@@ -1,23 +1,29 @@
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import FuseLoading from '@fuse/core/FuseLoading';
+import { useSelector } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import Switch from '@mui/material/Switch';
 import { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
 import Checkbox from '@mui/material/Checkbox/Checkbox';
 import _ from '@lodash';
+import { selectRoles } from '../../store/rolesSlice';
 
 function AdditionalTab(props) {
   const methods = useFormContext();
   const { control, formState } = methods;
   const { errors } = formState;
-  const { roles } = props;
+  const roles = useSelector(selectRoles);
   const [canView, setCanView] = useState(false);
 
   const handleSwitch = (evt) => {
     setCanView(evt.target.checked);
   };
+  if (roles.length < 1 || !roles) {
+    return <FuseLoading />;
+  }
 
   return (
     <div>
@@ -31,7 +37,9 @@ function AdditionalTab(props) {
             className="mt-32"
             options={roles}
             disableCloseOnSelect
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(option) => {
+              return option.name;
+            }}
             renderOption={(_props, option, { selected }) => (
               <li {..._props}>
                 <Checkbox style={{ marginRight: 8 }} checked={selected} />
@@ -73,16 +81,14 @@ function AdditionalTab(props) {
       />
       <Controller
         control={control}
-        name="postAddress"
+        name="postalAddress"
         render={({ field }) => (
           <TextField
             className="mt-32"
             {...field}
             label="Postal Address"
             placeholder="Postal Address"
-            id="postAddress"
-            error={!!errors.postAddress}
-            helperText={errors?.postAddress?.message}
+            id="postalAddress"
             variant="outlined"
             fullWidth
             InputProps={{
@@ -97,16 +103,16 @@ function AdditionalTab(props) {
       />
       <Controller
         control={control}
-        name="notes"
+        name="description"
         render={({ field }) => (
           <TextField
             className="mt-32"
             {...field}
-            label="Notes"
-            placeholder="Notes"
-            id="notes"
-            error={!!errors.notes}
-            helperText={errors?.notes?.message}
+            label="Description"
+            placeholder="Description"
+            id="description"
+            error={!!errors.description}
+            helperText={errors?.description?.message}
             variant="outlined"
             fullWidth
             multiline

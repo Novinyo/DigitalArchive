@@ -28,7 +28,6 @@ import {
 } from '../store/contactSlice';
 import { selectTags } from '../store/tagsSlice';
 import { selectSchools } from '../store/schoolsSlice';
-import { selectRoles } from '../store/rolesSlice';
 
 /**
  * Form Validation Schema
@@ -47,24 +46,19 @@ const schema = yup.object().shape({
     .date()
     .max(new Date(maxDate), 'Staff must be 18 and above')
     .required('Date of birth is required'),
-  hiredate: yup
+  dateJoined: yup
     .date()
     .max(new Date(), 'Date hired cannot be in the future')
     .required('You must select a hire date'),
   staffTypeId: yup.string().required('Please select a valid option'),
   schoolId: yup.string().required('Please select a valid school'),
-  // roles: yup.array().of(
-  //   yup.object().shape({
-  //     name: yup.string().required('Kindly select at least one role'),
-  //   })
-  // ),
+  roles: yup.array().min(1, 'Select at least one role'),
 });
 
 const ContactForm = (props) => {
   const contact = useSelector(selectContact);
   const tags = useSelector(selectTags);
   const schools = useSelector(selectSchools);
-  const roles = useSelector(selectRoles);
   const routeParams = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -76,9 +70,7 @@ const ContactForm = (props) => {
     resolver: yupResolver(schema),
   });
   const { control, watch, reset, handleSubmit, formState, getValues } = methods;
-
   const { isValid, dirtyFields, errors } = formState;
-
   const form = watch();
 
   useEffect(() => {
@@ -102,13 +94,15 @@ const ContactForm = (props) => {
         navigate(`/setup/contacts/${payload.id}`);
       });
     } else {
-      dispatch(updateContact(data));
+      dispatch(updateContact(data)).then(({ payload }) => {
+        navigate(`/setup/contacts/${payload.id}`);
+      });
     }
   }
 
   function handleRemoveContact() {
     dispatch(removeContact(contact.id)).then(() => {
-      navigate('/setup/contacts');
+      navigate(`/setup/contacts`);
     });
   }
   /**
@@ -168,7 +162,7 @@ const ContactForm = (props) => {
                                 if (!file) {
                                   return;
                                 }
-                                if (file.type !== 'image/jpeg' && file.type !== 'iamge/png') {
+                                if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
                                   alert('Only jpeg or png files are allowed');
                                   return;
                                 }
@@ -212,9 +206,14 @@ const ContactForm = (props) => {
                       color: 'text.secondary',
                     }}
                     className="object-cover w-full h-full text-64 font-bold"
-                    src={value}
+                    src={
+                      value ||
+                      (contact.avatar &&
+                        `assets/images/avatars/${contact.schoolCode}/${contact.avatar}`)
+                    }
                     alt={contact.firstName}
                   >
+                    {console.log(contact)}
                     {contact.firstName.charAt(0)}
                   </Avatar>
                 </Box>
@@ -243,10 +242,9 @@ const ContactForm = (props) => {
             <EmploymentTab staffTypes={tags} schools={schools} />
           </div>
           <div className={tabValue !== 2 ? 'hidden' : ''}>
-            <AdditionalTab roles={roles} />
+            <AdditionalTab />
           </div>
         </div>
-        {/*  */}
       </div>
 
       <Box
@@ -271,6 +269,7 @@ const ContactForm = (props) => {
           Save
         </Button>
       </Box>
+      {/* <ContactFooter /> */}
     </FormProvider>
   );
 };

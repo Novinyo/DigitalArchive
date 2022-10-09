@@ -34,6 +34,7 @@ export const saveSchoolType = createAsyncThunk(
     const sctData = {
       code: typeData.code.trim().toUpperCase(),
       name: typeData.name.trim(),
+      categoryId: typeData.categoryId.trim().toUpperCase(),
       description: typeData.description.trim(),
       Active: typeData.active,
     };

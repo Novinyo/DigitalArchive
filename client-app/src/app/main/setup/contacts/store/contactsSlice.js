@@ -9,7 +9,7 @@ import FuseUtils from '@fuse/utils';
 import { addContact, removeContact, updateContact } from './contactSlice';
 
 export const getContacts = createAsyncThunk(
-  'contactsApp/contacts/getContacts',
+  'setupApp/contacts/getContacts',
   async (params, { getState }) => {
     const response = await axios.get('/api/staff/staffs');
 
@@ -40,10 +40,10 @@ export const selectGroupedFilteredContacts = createSelector(
   [selectFilteredContacts],
   (contacts) => {
     return contacts
-      .sort((a, b) => a.user.lastName.localeCompare(b.user.lastName, 'es', { sensitivity: 'base' }))
+      .sort((a, b) => a.lastName.localeCompare(b.lastName, 'es', { sensitivity: 'base' }))
       .reduce((r, e) => {
         // get first letter of name of current element
-        const group = e.user.lastName[0];
+        const group = e.lastName[0];
         // if there is no property in accumulator with this letter create it
         if (!r[group]) r[group] = { group, children: [e] };
         // if there is push current element to children array for that letter
@@ -55,7 +55,7 @@ export const selectGroupedFilteredContacts = createSelector(
 );
 
 const contactsSlice = createSlice({
-  name: 'contactsApp/contacts',
+  name: 'setupApp/contacts',
   initialState: contactsAdapter.getInitialState({
     searchText: '',
   }),

@@ -11,18 +11,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [Authorize(Roles = "SuperAdmin, Admin")]
-    public class StudentTypeController:BaseApiController
+    public class StudentsController:BaseApiController
     {
-         [HttpGet("studentTypes")]
-        public async Task<IActionResult> GetStudentTypes(CancellationToken ct)
+         [HttpGet("students")]
+        public async Task<IActionResult> GetStudents(CancellationToken ct)
         {
             var result = await Mediator.Send(new All.Query(), ct);
 
             return HandleResult(result);
         }
 
-        [HttpGet("activeStudentTypes")]
-        public async Task<IActionResult> GetActiveStudentTypes(CancellationToken ct)
+        [HttpGet("activeStudents")]
+        public async Task<IActionResult> GetActiveStudents(CancellationToken ct)
         {
             var result = await Mediator.Send(new List.Query(), ct);
 
@@ -30,7 +30,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStudentType(EntityTypeAddDto entityType, CancellationToken ct)
+        public async Task<IActionResult> AddStudent(EntityTypeAddDto entityType, CancellationToken ct)
         {
             var result = await Mediator.Send(new Create.Command { StudentType = entityType }, ct);
 
@@ -38,7 +38,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetStudentTypeById(Guid id)
+        public async Task<IActionResult> GetStudentById(Guid id)
         {
             var result = await Mediator.Send(new Details.Query { Id = id });
 
@@ -46,19 +46,19 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditStudentType(Guid id, EntityTypeAddDto entityType)
+        public async Task<IActionResult> EditStudent(Guid id, EntityTypeAddDto entityType)
         {
             entityType.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command { StudentType = entityType }));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudentType(Guid id)
+        public async Task<IActionResult> DeleteStudent(Guid id)
         {
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
         [HttpGet("exists")]
-        public async Task<IActionResult> StudentTypeExists([FromQuery] DuplicateVm query)
+        public async Task<IActionResult> StudentExists([FromQuery] DuplicateVm query)
         {
             var result = await Mediator.Send(new DuplicateStudentType.Query { ToCheck  = query });
 

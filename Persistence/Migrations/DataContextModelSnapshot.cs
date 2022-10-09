@@ -300,6 +300,11 @@ namespace Persistence.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -336,18 +341,13 @@ namespace Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("SchoolId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SchoolId", "Code")
-                        .IsUnique()
-                        .HasFilter("[SchoolId] IS NOT NULL");
+                    b.HasIndex("Code")
+                        .IsUnique();
 
-                    b.HasIndex("SchoolId", "Name")
-                        .IsUnique()
-                        .HasFilter("[SchoolId] IS NOT NULL AND [Name] IS NOT NULL");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("DocumentTypes");
                 });
@@ -421,6 +421,11 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -893,15 +898,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("StaffId");
 
                     b.Navigation("DocumentType");
-                });
-
-            modelBuilder.Entity("Domain.DocumentType", b =>
-                {
-                    b.HasOne("Domain.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId");
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("Domain.School", b =>

@@ -7,6 +7,7 @@ namespace Application.Staffs.Dtos
 {
     public class StaffWDto
     {
+        public Guid Id { get; set; }
          public string Title { get; set; }
         public DateTime DOB { get; set; }
         public DateTime DateJoined { get; set; }

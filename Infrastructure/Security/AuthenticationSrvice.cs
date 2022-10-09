@@ -102,7 +102,7 @@ namespace Infrastructure.Security
             foreach(var role in roles)
             {
                 var current = (Roles)Enum.Parse(typeof(Roles), role.Name);
-                var newRole = new RoleDto{Id = role.Id, Name = current.GetAttributeStringValue()};
+                var newRole = new RoleDto{Id = role.Name, Name = current.GetAttributeStringValue()};
 
                 dtoRoles.Add(newRole);
             }
@@ -196,7 +196,7 @@ namespace Infrastructure.Security
             var userDto = new UserDetails
             {
                 Email = user.Email,
-                PhotoURL = "assets/images/avatars/brian-hughes.jpg",
+                PhotoURL =$"assets/images/avatars/{user.ProfilePicture}",
                 Username = user.UserName,
                 DisplayName = $"{user.FirstName} {user.LastName}",
                 Settings = new Settings { Layout = new object { }, Theme = new object { } },

@@ -16,12 +16,12 @@ namespace Application.Documents.Type
 {
     public class Details
     {
-         public class Query : IRequest<Result<CommonDto>>
+         public class Query : IRequest<Result<DocumentTypeDto>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<CommonDto>>
+        public class Handler : IRequestHandler<Query, Result<DocumentTypeDto>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -32,12 +32,12 @@ namespace Application.Documents.Type
                 this._mapper = mapper;
             }
 
-            public async Task<Result<CommonDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<DocumentTypeDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var documentType = await _context.DocumentTypes.ProjectTo<CommonDto>(_mapper.ConfigurationProvider)
+                var documentType = await _context.DocumentTypes.ProjectTo<DocumentTypeDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-                return Result<CommonDto>.Success(documentType, (int)HttpStatusCode.OK);
+                return Result<DocumentTypeDto>.Success(documentType, (int)HttpStatusCode.OK);
             }
         }
     }

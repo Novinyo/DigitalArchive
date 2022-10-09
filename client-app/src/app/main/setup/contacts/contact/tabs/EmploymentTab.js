@@ -23,6 +23,7 @@ function EmploymentTab(props) {
             label="Title"
             placeholder="Job title"
             id="title"
+            required
             error={!!errors.title}
             helperText={errors?.title?.message}
             variant="outlined"
@@ -47,6 +48,7 @@ function EmploymentTab(props) {
               {...(field ?? '')}
               label="Staff Type"
               id="staffTypeId"
+              required
               error={!!errors.staffTypeId}
               helperText={errors?.staffTypeId?.message}
               className="mt-32"
@@ -71,6 +73,7 @@ function EmploymentTab(props) {
             label="Email"
             placeholder="Email"
             variant="outlined"
+            required
             fullWidth
             error={!!errors.email}
             helperText={errors?.email?.message}
@@ -95,6 +98,7 @@ function EmploymentTab(props) {
             placeholder="Phone Number"
             variant="outlined"
             fullWidth
+            required
             error={!!errors.phoneNumber}
             helperText={errors?.phoneNumber?.message}
             InputProps={{
@@ -109,7 +113,7 @@ function EmploymentTab(props) {
       />
       <Controller
         control={control}
-        name="hiredate"
+        name="dateJoined"
         render={({ field }) => (
           <DatePicker
             {...field}
@@ -119,9 +123,10 @@ function EmploymentTab(props) {
               <TextField
                 {..._props}
                 className="mt-32"
-                id="hiredate"
+                id="dateJoined"
                 label="Hire Date"
                 type="date"
+                required
                 error={!!errors.hiredate}
                 helperText={errors?.hiredate?.message}
                 InputLabelProps={{
@@ -145,6 +150,7 @@ function EmploymentTab(props) {
             label="School"
             id="schoolId"
             error={!!errors.schoolId}
+            required
             helperText={errors?.schoolId?.message}
             variant="outlined"
             fullWidth

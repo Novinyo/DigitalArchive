@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Application.Core
@@ -12,7 +13,16 @@ namespace Application.Core
         {
 
         }
-        public static string LoadImage(string base64, string folderPath, string name)
+        public static string LoadBase64String(string fileName, string folderPath)
+        {
+            byte[] imageArray = File.ReadAllBytes(Path.Combine(folderPath, fileName));
+
+            string base64String = Convert.ToBase64String(imageArray);
+
+
+            return base64String;
+        }
+        public static string SaveImage(string base64, string folderPath, string name)
         {
             try
             {
@@ -21,20 +31,38 @@ namespace Application.Core
                 
                 if(fileType == "") return "";
 
+                var ProfilePictures = $"{folderPath}";
                 if (!Directory.Exists(folderPath))
-                {
                     Directory.CreateDirectory(folderPath);
-                }
+                
+
+                Regex regex=new Regex(@"^[\w/\:.-]+;base64,");
+                base64=regex.Replace(base64,string.Empty);
 
                 byte[] bytes = Convert.FromBase64String(base64);
-                var filePath = $"{folderPath}\\ProfilePictures\\{name}.{fileType}";
+                var filePath = $"{folderPath}\\{name}.{fileType}";
                 File.WriteAllBytes(filePath, bytes);
 
-                return filePath;
+                return $"{name}.{fileType}";
+            }
+            catch (System.Exception ex)
+            {
+                var message = ex.Message;
+                return "";
+            }
+        }
+
+        public static bool DeleteFile(string fileName, string path)
+        {
+            try
+            {
+                if(File.Exists(Path.Combine(path, fileName)))
+                    File.Delete(Path.Combine(path, fileName));
+                return true;
             }
             catch (System.Exception)
             {
-                return "";
+                return false;
             }
         }
     }
