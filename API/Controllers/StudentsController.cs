@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Common;
-using Application.StudentTypes;
+using Application.Students;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,12 +57,12 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
-        [HttpGet("exists")]
-        public async Task<IActionResult> StudentExists([FromQuery] DuplicateVm query)
+        [HttpGet("relationships")]
+        public IActionResult getRelationships()
         {
-            var result = await Mediator.Send(new DuplicateStudentType.Query { ToCheck  = query });
+            var result = Enum.GetValues(typeof(Relationships)).Cast<Relationships>().Select(r => r.ToString());
 
-            return HandleResult(result);
+            return Ok(result);
         }
     }
 }

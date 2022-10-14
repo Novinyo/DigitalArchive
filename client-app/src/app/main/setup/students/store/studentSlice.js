@@ -98,7 +98,7 @@ export const removeStudent = createAsyncThunk(
   }
 );
 
-export const selectStudent = ({ studentsApp }) => studentsApp.contact;
+export const selectStudent = ({ studentsApp }) => studentsApp.student;
 
 const studentSlice = createSlice({
   name: 'setupApp/student',

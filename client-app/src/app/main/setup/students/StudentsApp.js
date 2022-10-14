@@ -6,20 +6,16 @@ import { useParams } from 'react-router-dom';
 import { useDeepCompareEffect } from '@fuse/hooks';
 import { styled } from '@mui/material/styles';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import StudentsSidebarContent from './StudentsSidebarContent';
+import StudentsHeader from './StudentsHeader';
+import StudentsList from './StudentsList';
 import reducer from './store';
-import { getSchools } from './store/schoolsSlice';
+import { getStudents } from './store/studentsSlice';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   '& .FusePageSimple-header': {
     backgroundColor: theme.palette.background.paper,
-    borderBottomWidth: 0,
-    borderStyle: 'solid',
-    borderColor: theme.palette.divider,
   },
-  '& .FusePageSimple-toolbar': {},
-  '& .FusePageSimple-content': {},
-  '& .FusePageSimple-sidebarHeader': {},
-  '& .FusePageSimple-sidebarContent': {},
 }));
 function StudentsApp(props) {
   const dispatch = useDispatch();
@@ -29,32 +25,26 @@ function StudentsApp(props) {
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   useDeepCompareEffect(() => {
-    dispatch(getSchools());
+    dispatch(getStudents());
   }, [dispatch]);
 
   useEffect(() => {
+    console.log(routeParams);
     setRightSidebarOpen(Boolean(routeParams.id));
   }, [routeParams]);
 
   return (
     <Root
-      header={
-        <div className="p-24">
-          <h4>Student Page</h4>
-        </div>
-      }
-      content={
-        <div className="p-24">
-          <h3>Content</h3>
-          <br />
-          <div>
-            <h1>All about student page</h1>
-          </div>
-        </div>
-      }
-      scroll="content"
+      header={<StudentsHeader pageLayout={pageLayout} />}
+      content={<StudentsList />}
+      ref={pageLayout}
+      rightSidebarContent={<StudentsSidebarContent />}
+      rightSidebarOpen={rightSidebarOpen}
+      rightSidebarOnClose={() => setRightSidebarOpen(false)}
+      rightSidebarWidth={640}
+      scroll={isMobile ? 'normal' : 'content'}
     />
   );
 }
 
-export default withReducer('contactsApp', reducer)(StudentsApp);
+export default withReducer('studentsApp', reducer)(StudentsApp);

@@ -37,6 +37,8 @@ namespace Application.Core
             CreateMap<AppUser, UserStaffDto>()
             .ForMember(x => x.Avatar, u => u.MapFrom(u => u.ProfilePicture));
 
+            CreateMap<Student, Students.StudentDto>()
+            .ForMember(x => x.SchoolName, st => st.MapFrom(x => x.School.Name));
             CreateMap<Staff, Staffs.StaffRDto>()
             .ForMember(s => s.SchoolId, sr => sr.MapFrom(s => s.School.Id))
             .ForMember(s => s.Birthdate, sr => sr.MapFrom(s => s.DOB))

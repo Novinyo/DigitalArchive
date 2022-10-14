@@ -4,7 +4,7 @@ import StudentView from './student/StudentView';
 
 const StudentsApp = lazy(() => import('./StudentsApp'));
 
-const StudentConfig = {
+const StudentsAppConfig = {
   settings: {
     layout: {
       config: {},
@@ -28,4 +28,4 @@ const StudentConfig = {
   ],
 };
 
-export default StudentConfig;
+export default StudentsAppConfig;

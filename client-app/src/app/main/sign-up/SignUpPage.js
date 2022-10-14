@@ -20,7 +20,6 @@ import jwtService from '../../auth/services/jwtService';
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  displayName: yup.string().required('You must enter display name'),
   email: yup.string().email('You must enter a valid email').required('You must enter a email'),
   password: yup
     .string()
@@ -31,7 +30,7 @@ const schema = yup.object().shape({
 });
 
 const defaultValues = {
-  displayName: '',
+  // displayName: '',
   email: '',
   password: '',
   passwordConfirm: '',
@@ -39,20 +38,20 @@ const defaultValues = {
 };
 
 function SignUpPage() {
-  const { control, formState, handleSubmit, reset } = useForm({
+  const { control, formState, handleSubmit, setError } = useForm({
     mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const { isValid, dirtyFields, errors, setError } = formState;
+  const { isValid, dirtyFields, errors } = formState;
 
-  function onSubmit({ displayName, password, email }) {
+  function onSubmit({ email, password, passwordConfirm }) {
     jwtService
       .createUser({
-        displayName,
-        password,
         email,
+        password,
+        passwordConfirm,
       })
       .then((user) => {
         // No need to do anything, registered user data will be set at app/auth/AuthContext
@@ -89,25 +88,6 @@ function SignUpPage() {
             className="flex flex-col justify-center w-full mt-32"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <Controller
-              name="displayName"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  className="mb-24"
-                  label="Display name"
-                  autoFocus
-                  type="name"
-                  error={!!errors.displayName}
-                  helperText={errors?.displayName?.message}
-                  variant="outlined"
-                  required
-                  fullWidth
-                />
-              )}
-            />
-
             <Controller
               name="email"
               control={control}
@@ -187,6 +167,9 @@ function SignUpPage() {
             >
               Create your free account
             </Button>
+            <div className="flex items-center mt-32 justify-center h-full">
+              {errors?.main?.message && <Typography color="red"> {errors.main.message}</Typography>}
+            </div>
           </form>
         </div>
       </Paper>

@@ -11,7 +11,7 @@ namespace Application.Interfaces
     {
         Task<Result<UserDto>> LoginAsync(LoginDto login);
 
-        Task<UserDto> RegisterAsync(RegisterDto register);
+        Task<Result<UserDto>> RegisterAsync(RegisterDto register);
 
         Task<UserResponseDto> ChangePasswordAsync(AuthPassDto request);
 

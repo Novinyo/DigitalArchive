@@ -20,7 +20,7 @@ function StudentListItem(props) {
       >
         <ListItemAvatar>
           <Avatar
-            alt={student?.firstName}
+            alt={student.firstName}
             src={`assets/images/avatars/${student.schoolCode}/${student?.avatar}`}
           />
         </ListItemAvatar>
@@ -35,7 +35,7 @@ function StudentListItem(props) {
                 variant="body2"
                 color="text.secondary"
               >
-                {student.title}
+                {student.schoolName}
               </Typography>
             </>
           }

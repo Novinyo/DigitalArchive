@@ -1,58 +1,46 @@
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import FuseLoading from '@fuse/core/FuseLoading';
-import { useSelector } from 'react-redux';
 import { Controller, useFormContext } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { useState } from 'react';
-import Autocomplete from '@mui/material/Autocomplete/Autocomplete';
-import Checkbox from '@mui/material/Checkbox/Checkbox';
-import _ from '@lodash';
-import { selectRoles } from '../../store/rolesSlice';
 
-function AdditionalTab(props) {
+function AddressInfo(props) {
   const methods = useFormContext();
   const { control, formState } = methods;
-  const { errors } = formState;
-  const roles = useSelector(selectRoles);
+  const { isValid, dirtyFields, errors } = formState;
+
   const [canView, setCanView] = useState(false);
 
   const handleSwitch = (evt) => {
     setCanView(evt.target.checked);
   };
-  if (roles.length < 1 || !roles) {
-    return <FuseLoading />;
-  }
 
   return (
     <div>
       <Controller
         control={control}
-        name="roles"
-        render={({ field: { onChange, value } }) => (
-          <Autocomplete
-            multiple
-            id="roles"
+        name="emergencyContact"
+        render={({ field }) => (
+          <TextField
             className="mt-32"
-            options={roles}
-            disableCloseOnSelect
-            getOptionLabel={(option) => {
-              return option.name;
-            }}
-            renderOption={(_props, option, { selected }) => (
-              <li {..._props}>
-                <Checkbox style={{ marginRight: 8 }} checked={selected} />
-                {option.name}
-              </li>
-            )}
-            value={value ? value.map((id) => _.find(roles, { id })) : []}
-            onChange={(event, newValue) => {
-              onChange(newValue.map((item) => item.id));
-            }}
+            {...field}
+            label="Emergency Contact"
+            placeholder="Emergency contact"
+            id="emergencyContact"
+            error={!!errors.emergencyContact}
+            helperText={errors?.emergencyContact?.message}
+            variant="outlined"
+            required
             fullWidth
-            renderInput={(params) => <TextField {...params} label="Roles" placeholder="Roles" />}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FuseSvgIcon size={20}>heroicons-solid:phone</FuseSvgIcon>
+                </InputAdornment>
+              ),
+            }}
           />
         )}
       />
@@ -184,4 +172,4 @@ function AdditionalTab(props) {
   );
 }
 
-export default AdditionalTab;
+export default AddressInfo;

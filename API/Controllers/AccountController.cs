@@ -30,7 +30,7 @@ namespace API.Controllers
 
         [HttpPost("register")]
         [AllowAnonymous]
-        public async Task<ActionResult<UserDto>> Register(RegisterDto user)
+        public async Task<ActionResult<Result<UserDto>>> Register(RegisterDto user)
         {
             return await _authService.RegisterAsync(user);
         }

@@ -20,4 +20,13 @@ namespace Application.Common
         [StringValue("D")]
         D
     }
+
+    public enum Relationships
+    {
+        [StringValue("Parent")]
+        Parent,
+
+        [StringValue("Guardian")]
+        Guardian
+    }
 }

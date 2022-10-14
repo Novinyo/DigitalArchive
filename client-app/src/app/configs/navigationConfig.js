@@ -52,12 +52,12 @@ const navigationConfig = [
         subtitle: 'Student types...',
         icons: 'heroicons-outline:star',
         children: [
-          {
-            id: 'studenttypes',
-            title: 'Student Types',
-            type: 'item',
-            url: '/setup/studenttypes',
-          },
+          // {
+          //   id: 'studenttypes',
+          //   title: 'Student Types',
+          //   type: 'item',
+          //   url: '/setup/studenttypes',
+          // },
           {
             id: 'students',
             title: 'Students',

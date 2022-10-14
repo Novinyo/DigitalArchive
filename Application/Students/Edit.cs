@@ -13,7 +13,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.StudentTypes
+namespace Application.Students
 {
     public class Edit
     {

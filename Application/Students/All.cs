@@ -12,13 +12,13 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.StudentTypes
+namespace Application.Students
 {
     public class All
     {
-        public class Query : IRequest<Result<List<EntityTypeDto>>> { }
+        public class Query : IRequest<Result<List<StudentDto>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<EntityTypeDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<StudentDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,13 +28,13 @@ namespace Application.StudentTypes
                 _context = context;
             }
 
-            public async Task<Result<List<EntityTypeDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<StudentDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var studentTypes = await _context.StudentTypes.Where(x => x.DeletedBy == null)
-                .ProjectTo<EntityTypeDto>(_mapper.ConfigurationProvider)
+                var students = await _context.Students.Where(x => x.DeletedBy == null)
+                .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
                 
-                return Result<List<EntityTypeDto>>.Success(studentTypes, (int)HttpStatusCode.OK);
+                return Result<List<StudentDto>>.Success(students, (int)HttpStatusCode.OK);
             }
         }
     }
