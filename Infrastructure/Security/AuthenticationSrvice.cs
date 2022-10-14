@@ -13,6 +13,7 @@ using Persistence;
 using Domain.Enums;
 using AutoMapper;
 using Application.Common;
+using System.Net;
 
 namespace Infrastructure.Security
 {
@@ -102,7 +103,7 @@ namespace Infrastructure.Security
             foreach(var role in roles)
             {
                 var current = (Roles)Enum.Parse(typeof(Roles), role.Name);
-                var newRole = new RoleDto{Id = role.Id, Name = current.GetAttributeStringValue()};
+                var newRole = new RoleDto{Id = role.Name, Name = current.GetAttributeStringValue()};
 
                 dtoRoles.Add(newRole);
             }
@@ -138,43 +139,41 @@ namespace Infrastructure.Security
             return Result<UserDto>.Success(loginUser, 200);
         }
 
-        public async Task<UserDto> RegisterAsync(RegisterDto register)
+        public async Task<Result<UserDto>> RegisterAsync(RegisterDto register)
         {
-            if (await _userManager.Users.AnyAsync(x => x.UserName == register.Username))
-                throw new Exception($"Username '{register.Username}' already taken");
 
-            if (await _userManager.Users.AnyAsync(x => x.Email == register.Email))
-                throw new Exception($"Username '{register.Username}' already taken");
+            var newUser = await _userManager.FindByEmailAsync(register.Email);
 
+            if(newUser == null)
+                return Result<UserDto>.Failure($"'{register.Email}' not found", (int)HttpStatusCode.NotFound);
+            
+            if(newUser.PasswordHash != null)
+                return Result<UserDto>.Failure($"Operation is not allowed", (int)HttpStatusCode.Forbidden);
 
-            var userId = _userAccessor.GetUserId();
-
-            if (!Guid.TryParse(userId, out Guid newId))
+             if (register.Password.Length < 8)
             {
-                throw new Exception("Invalid user");
+                return Result<UserDto>.Failure("Password must be at least 8 characters", (int)HttpStatusCode.BadRequest);
+            }
+            else if (!AuthenticationHelper.TimeConstantCompare(register.Password, register.MatchPassword))
+            {
+                return Result<UserDto>.Failure("Passwords do not match", (int)HttpStatusCode.BadRequest);
             }
 
-            var user = new AppUser
-            {
-                Email = register.Email,
-                FirstName = register.FirstName,
-                LastName = register.LastName,
-                IsActive = true,
-                CreatedAt = DateTime.UtcNow,
-                CreatedBy = userId
-            };
+            newUser.EmailConfirmed = true;
+            newUser.CanLogin = true;
 
-            var result = await _userManager.CreateAsync(user);
+            var result = await _userManager.AddPasswordAsync(newUser, register.Password);
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "Staff");
+                string jwtSecurityToken = await _tokenService.GenerateToken(newUser);
+                var user = await CreateUserObject(newUser);
 
-                string jwtSecurityToken = await _tokenService.GenerateToken(user);
-                return await CreateUserObject(user);
+                return Result<UserDto>.Success(user, (int)HttpStatusCode.Created);
             }
             else
-                throw new Exception($"{string.Join(", ", result.Errors.ToList())}");
+                return  Result<UserDto>.Failure($"{string.Join(", ", result.Errors.Select(x => x.Description))}",
+                 (int)HttpStatusCode.InternalServerError);
         }
 
         private async Task<UserDto> CreateUserObject(AppUser user)
@@ -185,7 +184,7 @@ namespace Infrastructure.Security
             var userRoles = await _userManager.GetRolesAsync(user);
 
             var roles = userRoles.Select(x => x.ToString().ToLower()).ToArray();
-            var staff = await _context.Staffs.FirstOrDefaultAsync(x => x.User.Id == user.Id);
+            var staff = await _context.Staffs.Include(s => s.School).FirstOrDefaultAsync(x => x.User.Id == user.Id);
             if (staff != null) {
                 school.SchoolId = staff.SchoolId.ToString() ?? "";
                 school.Name = staff.School?.Name;
@@ -196,7 +195,7 @@ namespace Infrastructure.Security
             var userDto = new UserDetails
             {
                 Email = user.Email,
-                PhotoURL = "assets/images/avatars/brian-hughes.jpg",
+                PhotoURL =$"assets/images/avatars/{user.ProfilePicture}",
                 Username = user.UserName,
                 DisplayName = $"{user.FirstName} {user.LastName}",
                 Settings = new Settings { Layout = new object { }, Theme = new object { } },

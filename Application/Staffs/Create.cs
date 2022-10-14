@@ -11,17 +11,19 @@ using Microsoft.EntityFrameworkCore;
 using Domain;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using System;
+using System.Collections.Generic;
 
 namespace Application.Staffs
 {
     public class Create
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result<StaffRDto>>
         {
             public StaffWDto Staff { get; set; }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command, Result<StaffRDto>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -38,7 +40,7 @@ namespace Application.Staffs
                 _customSettings = customSettings.Value;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<StaffRDto>> Handle(Command request, CancellationToken cancellationToken)
             {
                 using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
                 try
@@ -47,44 +49,46 @@ namespace Application.Staffs
 
                     var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId);
 
-                    if (user == null) return Result<Unit>.Failure("Unauthorized operation",
+                    if (user == null) return Result<StaffRDto>.Failure("Unauthorized operation",
                    (int)HttpStatusCode.Unauthorized);
 
-                     var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id == request.Staff.SchoolId, cancellationToken);
+                    var school = await _context.Schools.FirstOrDefaultAsync(x => x.Id == request.Staff.SchoolId, cancellationToken);
 
                     var newUser = _mapper.Map<AppUser>(request.Staff.User);
                     var existingUser = await _userManager.FindByNameAsync(newUser.UserName);
                     if (existingUser != null)
-                        return Result<Unit>.Failure("Username already exists", (int)HttpStatusCode.BadRequest);
+                        return Result<StaffRDto>.Failure("Username already exists", (int)HttpStatusCode.BadRequest);
 
                     existingUser = await _userManager.FindByEmailAsync(newUser.Email);
                     if (existingUser != null)
-                        return Result<Unit>.Failure("Email already exists", (int)HttpStatusCode.BadRequest);
+                        return Result<StaffRDto>.Failure("Email already exists", (int)HttpStatusCode.BadRequest);
 
-                      var folderPath = $"{_customSettings.FilePath}\\{school.Code}";
+                    var path = "";
 
-                    var fileName = $"{newUser.UserName}_{school.Code}";
-                    var path = DocumentConverter.LoadImage(request.Staff.User.Avatar, folderPath, fileName);
+                    if (request.Staff.User.Avatar.IndexOf("base64") != -1)
+                    {
+                        var folderPath = $"{_customSettings.FilePath}\\{school.Code}";
 
-                    newUser.ProfilePicture = path;
-                    newUser.EmailConfirmed = true;
+                        var fileName = $"{newUser.UserName}_{school.Code}";
+                        path = DocumentConverter.SaveImage(request.Staff.User.Avatar, folderPath, fileName);
+                    }
+                    newUser.ProfilePicture = path != "" ? path : "";
+                    newUser.EmailConfirmed = false;
                     newUser.CreatedAt = System.DateTime.UtcNow;
                     newUser.CreatedBy = userId;
-                    
+
+
 
                     var result = await _userManager.CreateAsync(newUser);
 
                     if (result.Succeeded)
                     {
                         var roles = request.Staff.Roles;
-                        foreach (var role in roles)
-                        {
-                            var currentRole = await _context.Roles.FindAsync(role);
-                            await _userManager.AddToRoleAsync(user, currentRole.Name);
-                        }
+
+                        await _userManager.AddToRolesAsync(newUser, roles);
 
                         var staff = _mapper.Map<Staff>(request.Staff);
-                       
+
                         var staffType = await _context.StaffTypes.FirstOrDefaultAsync(x => x.Id == request.Staff.StaffTypeId);
                         staff.User = newUser;
                         staff.School = school;
@@ -95,21 +99,25 @@ namespace Application.Staffs
 
                         var isCreated = await _context.SaveChangesAsync() > 0;
 
-                        if (!isCreated) return Result<Unit>.Failure("Failed to create Staff type",
+                        if (!isCreated) return Result<StaffRDto>.Failure("Failed to create Staff",
                          (int)HttpStatusCode.BadRequest);
 
 
                         await transaction.CommitAsync();
-                        return Result<Unit>.Success(Unit.Value, (int)HttpStatusCode.Created);
+
+                        var createdStaff = _mapper.Map<StaffRDto>(staff);
+
+                        return Result<StaffRDto>.Success(createdStaff, (int)HttpStatusCode.Created);
                     }
-                    
-                    
-                    return Result<Unit>.Failure("Cannot create a new staff", (int)HttpStatusCode.BadRequest);
+
+
+                    return Result<StaffRDto>.Failure("Cannot create a new staff", (int)HttpStatusCode.BadRequest);
                 }
-                catch (System.Exception)
+                catch (System.Exception ex)
                 {
+                    System.Console.WriteLine(ex.Message);
                     await transaction.RollbackAsync();
-                    return Result<Unit>.Failure("Internal server error", (int)HttpStatusCode.InternalServerError);
+                    return Result<StaffRDto>.Failure("Internal server error", (int)HttpStatusCode.InternalServerError);
                 }
 
             }

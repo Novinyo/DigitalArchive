@@ -14,13 +14,10 @@ namespace Persistence.Configurations
         {
              builder.HasIndex(x => new{x.Code, x.SchoolId}).IsUnique();
             builder.Property(x => x.Code).HasMaxLength(20).IsRequired();
-
+             builder.Property(x => x.SchoolId).IsRequired();
             builder.Property(x => x.FirstName).HasMaxLength(50).IsRequired();
             builder.Property(x => x.MiddleName).HasMaxLength(50);
             builder.Property(x => x.LastName).HasMaxLength(50).IsRequired();
-
-            builder.Property(x => x.FatherName).HasMaxLength(150);
-            builder.Property(x => x.MotherName).HasMaxLength(150);
             builder.Property(x => x.CreatedBy).HasMaxLength(150).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.DOB).IsRequired();

@@ -211,6 +211,13 @@ function SchoolTypesTable(props) {
                       {n.name}
                     </TableCell>
                     <TableCell
+                      className="p-4 md:p-20 text-center truncate"
+                      component="th"
+                      scope="row"
+                    >
+                      {n.categoryId}
+                    </TableCell>
+                    <TableCell
                       className="p-4 md:p-16 text-center"
                       component="th"
                       scope="row"

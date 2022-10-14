@@ -5,6 +5,9 @@ import school from './schoolSlice';
 import schools from './schoolsSlice';
 import staffType from './staffTypeSlice';
 import staffTypes from './staffTypesSlice';
+import documentTypes from './documentTypesSlice';
+import documentType from './documentTypeSlice';
+import categories from './categoriesSlice';
 
 const reducer = combineReducers({
   schoolTypes,
@@ -13,6 +16,9 @@ const reducer = combineReducers({
   school,
   staffTypes,
   staffType,
+  documentTypes,
+  documentType,
+  categories,
 });
 
 export default reducer;

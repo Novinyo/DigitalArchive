@@ -161,24 +161,29 @@ namespace Persistence.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("EmergencyContact")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("FatherEmail")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("FirstName")
+                    b.Property<string>("FatherFirstName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
+                    b.Property<string>("FatherLastName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("MiddleName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                    b.Property<string>("FatherPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -187,7 +192,22 @@ namespace Persistence.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("MotherEmail")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("MotherFirstName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MotherLastName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MotherPhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -196,20 +216,11 @@ namespace Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<int>("RelationshipType")
-                        .HasColumnType("int");
-
                     b.Property<string>("StreetAddress")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.HasIndex("Code", "Email")
-                        .IsUnique();
 
                     b.ToTable("Contacts");
                 });
@@ -276,6 +287,9 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("StaffId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
@@ -288,6 +302,8 @@ namespace Persistence.Migrations
 
                     b.HasIndex("StaffId");
 
+                    b.HasIndex("StudentId");
+
                     b.ToTable("Documents");
                 });
 
@@ -299,6 +315,11 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -336,18 +357,13 @@ namespace Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("SchoolId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SchoolId", "Code")
-                        .IsUnique()
-                        .HasFilter("[SchoolId] IS NOT NULL");
+                    b.HasIndex("Code")
+                        .IsUnique();
 
-                    b.HasIndex("SchoolId", "Name")
-                        .IsUnique()
-                        .HasFilter("[SchoolId] IS NOT NULL AND [Name] IS NOT NULL");
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("DocumentTypes");
                 });
@@ -421,6 +437,11 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("bit");
+
+                    b.Property<string>("CategoryId")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -640,10 +661,6 @@ namespace Persistence.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("FatherName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -668,14 +685,7 @@ namespace Persistence.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<string>("MotherName")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
                     b.Property<Guid>("SchoolId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("StudentTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -683,8 +693,6 @@ namespace Persistence.Migrations
                     b.HasIndex("ContactId");
 
                     b.HasIndex("SchoolId");
-
-                    b.HasIndex("StudentTypeId");
 
                     b.HasIndex("Code", "SchoolId")
                         .IsUnique();
@@ -892,16 +900,11 @@ namespace Persistence.Migrations
                         .WithMany("Documents")
                         .HasForeignKey("StaffId");
 
+                    b.HasOne("Domain.Student", null)
+                        .WithMany("Documents")
+                        .HasForeignKey("StudentId");
+
                     b.Navigation("DocumentType");
-                });
-
-            modelBuilder.Entity("Domain.DocumentType", b =>
-                {
-                    b.HasOne("Domain.School", "School")
-                        .WithMany()
-                        .HasForeignKey("SchoolId");
-
-                    b.Navigation("School");
                 });
 
             modelBuilder.Entity("Domain.School", b =>
@@ -957,17 +960,9 @@ namespace Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.StaffType", "StudentType")
-                        .WithMany()
-                        .HasForeignKey("StudentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Contact");
 
                     b.Navigation("School");
-
-                    b.Navigation("StudentType");
                 });
 
             modelBuilder.Entity("Domain.StudentType", b =>
@@ -1033,6 +1028,11 @@ namespace Persistence.Migrations
                 });
 
             modelBuilder.Entity("Domain.Staff", b =>
+                {
+                    b.Navigation("Documents");
+                });
+
+            modelBuilder.Entity("Domain.Student", b =>
                 {
                     b.Navigation("Documents");
                 });

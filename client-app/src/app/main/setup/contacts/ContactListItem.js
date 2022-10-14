@@ -8,6 +8,7 @@ import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
 
 function ContactListItem(props) {
   const { contact } = props;
+
   return (
     <>
       <ListItem
@@ -18,11 +19,14 @@ function ContactListItem(props) {
         to={`/setup/contacts/${contact.id}`}
       >
         <ListItemAvatar>
-          <Avatar alt={contact.user.firstName} src={contact.avatar} />
+          <Avatar
+            alt={contact?.firstName}
+            src={`assets/images/avatars/${contact.schoolCode}/${contact?.avatar}`}
+          />
         </ListItemAvatar>
         <ListItemText
           classes={{ root: 'm-0', primary: 'font-medium leading-5 truncate' }}
-          primary={`${contact.user.firstName} ${contact.user.lastName}`}
+          primary={`${contact.firstName} ${contact.lastName}`}
           secondary={
             <>
               <Typography

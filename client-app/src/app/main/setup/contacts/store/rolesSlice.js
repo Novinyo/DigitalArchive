@@ -2,16 +2,13 @@ import { createAsyncThunk, createEntityAdapter, createSlice } from '@reduxjs/too
 import axios from 'axios';
 
 export const getRoles = createAsyncThunk(
-  'contactsApp/roles/getRoles',
+  'setupApp/roles/getRoles',
   async (params, { getState }) => {
     const response = await axios.get('/api/account/loadroles');
 
     const data = await response.data;
-    const roles = data.map((x) => {
-      return { id: x.id, name: x.name };
-    });
 
-    return roles;
+    return data;
   }
 );
 
@@ -22,7 +19,7 @@ export const { selectAll: selectRoles, selectById: selectRolesById } = rolesAdap
 );
 
 const rolesSlice = createSlice({
-  name: 'contactsApp/roles',
+  name: 'setupApp/roles',
   initialState: rolesAdapter.getInitialState([]),
   reducers: {},
   extraReducers: {

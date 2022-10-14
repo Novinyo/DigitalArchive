@@ -31,5 +31,12 @@ namespace API.Controllers
 
             return HandleResult(result);
         }
+
+          [HttpPut("{id}")]
+        public async Task<IActionResult> EditStaffType(Guid id, StaffWDto staff)
+        {
+            staff.Id = id;
+            return HandleResult(await Mediator.Send(new Edit.Command { Staff = staff }));
+        }
     }
 }

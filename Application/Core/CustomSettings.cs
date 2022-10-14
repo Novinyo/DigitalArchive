@@ -8,5 +8,6 @@ namespace Application.Core
     public class CustomSettings
     {
         public string FilePath { get; set; }
+        public string FileRelativePath { get; set; }
     }
 }

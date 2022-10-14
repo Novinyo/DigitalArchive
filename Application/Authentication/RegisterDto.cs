@@ -8,12 +8,7 @@ namespace Application.Authentication
 {
     public class RegisterDto
     {
-         [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-        
+       
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -23,6 +18,7 @@ namespace Application.Authentication
         public string Password { get; set; }
 
         [Required]
-        public string Username { get; set; }
+        [RegularExpression("(?=.*\\d)(?=.*[a-z])(?=.*[A-z]).{6,12}$", ErrorMessage = "Password must be complex")]
+        public string MatchPassword { get; set; }
     }
 }

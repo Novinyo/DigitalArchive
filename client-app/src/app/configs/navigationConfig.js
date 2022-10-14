@@ -52,12 +52,12 @@ const navigationConfig = [
         subtitle: 'Student types...',
         icons: 'heroicons-outline:star',
         children: [
-          {
-            id: 'studenttypes',
-            title: 'Student Types',
-            type: 'item',
-            url: '/setup/studenttypes',
-          },
+          // {
+          //   id: 'studenttypes',
+          //   title: 'Student Types',
+          //   type: 'item',
+          //   url: '/setup/studenttypes',
+          // },
           {
             id: 'students',
             title: 'Students',
@@ -85,6 +85,27 @@ const navigationConfig = [
             type: 'item',
             url: '/setup/contacts',
           },
+        ],
+      },
+      {
+        id: 'docType_el',
+        title: 'Documents',
+        type: 'collapse',
+        subtitle: 'Document types...',
+        icons: 'heroicons-outline:star',
+        children: [
+          {
+            id: 'documenttypes',
+            title: 'Document Types',
+            type: 'item',
+            url: '/setup/documenttypes',
+          },
+          // {
+          //   id: 'staffs',
+          //   title: 'Staffs',
+          //   type: 'item',
+          //   url: '/setup/contacts',
+          // },
         ],
       },
     ],

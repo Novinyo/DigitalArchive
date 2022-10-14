@@ -18,7 +18,7 @@ namespace Application.Documents.Type
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public CommonDto DocumentType { get; set; }
+            public DocumentTypeDto DocumentType { get; set; }
         }
         public class CommandValidator : AbstractValidator<Command>
         {
@@ -26,6 +26,7 @@ namespace Application.Documents.Type
             {
                 RuleFor(x => x.DocumentType.Code).NotEmpty();
                 RuleFor(x => x.DocumentType.Name).NotEmpty();
+                RuleFor(x => x.DocumentType.Category).NotEmpty();
             }
         }
 

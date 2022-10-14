@@ -40,6 +40,13 @@ const rows = [
     sort: true,
   },
   {
+    id: 'category',
+    align: 'center',
+    disablePadding: false,
+    label: 'Category',
+    sort: true,
+  },
+  {
     id: 'active',
     align: 'center',
     disablePadding: false,

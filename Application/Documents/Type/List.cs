@@ -16,9 +16,9 @@ namespace Application.Documents.Type
 {
     public class List
     {
-        public class Query : IRequest<Result<List<CommonDto>>> { }
+        public class Query : IRequest<Result<List<DocumentTypeDto>>> { }
 
-        public class Handler : IRequestHandler<Query, Result<List<CommonDto>>>
+        public class Handler : IRequestHandler<Query, Result<List<DocumentTypeDto>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,13 +28,13 @@ namespace Application.Documents.Type
                 _context = context;
             }
 
-            public async Task<Result<List<CommonDto>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<DocumentTypeDto>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var documentTypes = await _context.DocumentTypes.Where(x => x.Active == true)
-                .ProjectTo<CommonDto>(_mapper.ConfigurationProvider)
+                .ProjectTo<DocumentTypeDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
                 
-                return Result<List<CommonDto>>.Success(documentTypes, (int)HttpStatusCode.OK);
+                return Result<List<DocumentTypeDto>>.Success(documentTypes, (int)HttpStatusCode.OK);
             }
         }
     }

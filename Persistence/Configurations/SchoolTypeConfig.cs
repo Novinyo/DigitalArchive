@@ -16,7 +16,7 @@ namespace Persistence.Configurations
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();
 
             builder.Property(x => x.Description).HasMaxLength(200);
-
+             builder.Property(x => x.CategoryId).HasMaxLength(1).IsRequired();
             builder.Property(x => x.CreatedBy).HasMaxLength(150).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.ModifiedBy).HasMaxLength(150);

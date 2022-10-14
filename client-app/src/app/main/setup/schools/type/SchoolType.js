@@ -25,6 +25,7 @@ import reducer from '../../store';
 import TypeHeader from './TypeHeader';
 import SchoolTypeForm from './SchoolTypeForm';
 import setupService from '../../services/schoolService/setupService';
+
 /**
  * Form Validation Schema
  */

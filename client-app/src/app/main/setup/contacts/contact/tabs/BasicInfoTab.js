@@ -7,7 +7,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 function BasicInfoTab(props) {
   const methods = useFormContext();
   const { control, formState } = methods;
-  const { errors } = formState;
+  const { isValid, dirtyFields, errors } = formState;
 
   return (
     <div>
@@ -71,10 +71,7 @@ function BasicInfoTab(props) {
             label="Middle Name"
             placeholder="Middle Name"
             id="middleName"
-            error={!!errors.middleName}
-            helperText={errors?.middleName?.message}
             variant="outlined"
-            required
             fullWidth
             InputProps={{
               startAdornment: (
@@ -126,6 +123,7 @@ function BasicInfoTab(props) {
                 id="birthdate"
                 label="Birth Date"
                 type="date"
+                required
                 error={!!errors.birthdate}
                 helperText={errors?.birthdate?.message}
                 InputLabelProps={{
