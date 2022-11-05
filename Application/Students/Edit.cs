@@ -17,20 +17,22 @@ namespace Application.Students
 {
     public class Edit
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result<StudentDto>>
         {
-            public EntityTypeAddDto StudentType { get; set; }
+            public StudentWDto Student { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.StudentType.Code).NotEmpty();
-                RuleFor(x => x.StudentType.Name).NotEmpty();
+                RuleFor(x => x.Student.Code).NotEmpty();
+                RuleFor(x => x.Student.FirstName).NotEmpty();
+                RuleFor(x => x.Student.LastName).NotEmpty();
+                RuleFor(x => x.Student.DateOfBirth).NotEmpty();
             }
         }
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command, Result<StudentDto>>
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
@@ -42,53 +44,76 @@ namespace Application.Students
                 _userAccessor = userAccessor;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<StudentDto>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var userId = _userAccessor.GetUserId();
+                using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
 
-                if (userId == null) return Result<Unit>.Failure("Unauthorized operation",
-                (int)HttpStatusCode.Unauthorized);
-
-                var staff = await _context.Staffs.FirstOrDefaultAsync(x => x.User.Id == userId);
-
-                    Guid? schoolId = staff?.SchoolId != null ? staff.SchoolId : null;
-
-                var studentType = await _context.StudentTypes
-                .FirstOrDefaultAsync(x => x.Id == request.StudentType.Id
-                && x.DeletedAt == null);
-
-                if (studentType == null) return Result<Unit>.Failure("No matching student type found",
-                 (int)HttpStatusCode.NotFound);
-
-                var existingStudentType = await _context.StudentTypes
-                   .FirstOrDefaultAsync(x => x.Id != request.StudentType.Id &&
-                    ((x.Code == request.StudentType.Code && x.SchoolId == schoolId) 
-                    || (x.Name == request.StudentType.Name && x.SchoolId == schoolId)));
-
-                if (existingStudentType != null)
+                try
                 {
-                    if (existingStudentType.Code == request.StudentType.Code)
-                        return Result<Unit>.Failure("Student type code must be unique",
-                         (int)HttpStatusCode.BadRequest);
+                    var userId = _userAccessor.GetUserId();
 
-                    if (existingStudentType.Name == request.StudentType.Name)
-                        return Result<Unit>.Failure("Student type name must be unique",
-                         (int)HttpStatusCode.BadRequest);
+                    if (userId == null) return Result<StudentDto>.Failure("Unauthorized operation",
+                    (int)HttpStatusCode.Unauthorized);
 
+                    var student = await _context.Students.Include(x => x.Contact).Include(x => x.School)
+                    .FirstOrDefaultAsync(x => x.Id == request.Student.Id
+                    && x.DeletedAt == null);
+
+                    var school = student.School;
+
+                    if (student == null) return Result<StudentDto>.Failure("No matching student found",
+                     (int)HttpStatusCode.NotFound);
+
+                    var duplicateCode = await _context.Students
+                       .FirstOrDefaultAsync(x => x.Code == request.Student.Code
+                       && x.Id != request.Student.Id && x.SchoolId == request.Student.SchoolId);
+
+                    if (duplicateCode != null)
+                    {
+                        return Result<StudentDto>.Failure("Student code must be unique",
+                        (int)HttpStatusCode.BadRequest);
+
+                    }
+                    if (student.Contact == null || student.Contact.DeletedBy != null)
+                        return Result<StudentDto>.Failure("No matching contact found",
+                        (int)HttpStatusCode.NotFound);
+
+                    var contact = student.Contact;
+
+                    _mapper.Map(request.Student.Contact, contact);
+                    if (_context.Entry(contact).State == EntityState.Modified)
+                    {
+                        contact.ModifiedAt = DateTime.UtcNow;
+                        contact.ModifiedBy = userId;
+                    }
+
+                    _mapper.Map(request.Student, student);
+
+                    if (_context.Entry(student).State == EntityState.Modified)
+                    {
+                        student.ModifiedAt = DateTime.UtcNow;
+                        student.ModifiedBy = userId;
+                        student.School = school;
+                    }
+
+                    var result = await _context.SaveChangesAsync() > 0;
+
+                    if (!result) return Result<StudentDto>.Failure("Failed to update student",
+                     (int)HttpStatusCode.BadRequest);
+
+
+                    await transaction.CommitAsync();
+                    var studentDto = _mapper.Map<StudentDto>(student);
+                    return Result<StudentDto>.Success(studentDto, (int)HttpStatusCode.OK);
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+
+                    return Result<StudentDto>.Failure(ex.Message,
+                     (int)HttpStatusCode.InternalServerError);
                 }
 
-
-                _mapper.Map(request.StudentType, studentType);
-
-                studentType.ModifiedAt = DateTime.UtcNow;
-                studentType.ModifiedBy = userId;
-
-                var result = await _context.SaveChangesAsync() > 0;
-
-                if (!result) return Result<Unit>.Failure("Failed to update student type",
-                 (int)HttpStatusCode.BadRequest);
-
-                return Result<Unit>.Success(Unit.Value, (int)HttpStatusCode.OK);
             }
         }
     }

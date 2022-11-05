@@ -56,7 +56,8 @@ const ContactView = () => {
               }}
               className="w-128 h-128 text-64 font-bold"
               src={
-                contact.avatar && `assets/images/avatars/${contact.schoolCode}/${contact.avatar}`
+                contact.avatar &&
+                `https://localhost:5001/documents/images/${contact.schoolCode}/${contact.avatar}`
               }
               alt={contact.firstName}
             >
@@ -73,7 +74,6 @@ const ContactView = () => {
           <Typography className="mt-12 text-3xl font-bold truncate">
             {`${contact.firstName} ${contact.middleName} ${contact.lastName}`}
           </Typography>
-
           <div className="flex flex-wrap items-center mt-8">
             {contact.roles.map((id) => (
               <Chip
@@ -84,9 +84,7 @@ const ContactView = () => {
               />
             ))}
           </div>
-
           <Divider className="mt-16 mb-24" />
-
           <div className="flex flex-col space-y-32">
             {contact.title && (
               <div className="flex items-center">
@@ -140,7 +138,7 @@ const ContactView = () => {
                 </div>
               </div>
             )}
-            {contact.birthdate && (
+            {contact.dateJoined && (
               <div className="flex items-center">
                 <FuseSvgIcon>heroicons-outline:clock</FuseSvgIcon>
                 <div className="ml-24 leading-6">

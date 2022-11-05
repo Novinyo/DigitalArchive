@@ -10,6 +10,7 @@ import { selectFuseNavbar } from 'app/store/fuse/navbarSlice';
 import AdjustFontSize from '../../shared-components/AdjustFontSize';
 import FullScreenToggle from '../../shared-components/FullScreenToggle';
 import NotificationPanelToggleButton from '../../shared-components/notificationPanel/NotificationPanelToggleButton';
+import NavigationShortcuts from '../../shared-components/NavigationShortcuts';
 import NavbarToggleButton from '../../shared-components/NavbarToggleButton';
 import UserMenu from '../../shared-components/UserMenu';
 
@@ -52,6 +53,10 @@ function ToolbarLayout1(props) {
                 </Hidden>
               </>
             )}
+
+            <Hidden lgDown>
+              <NavigationShortcuts />
+            </Hidden>
           </div>
 
           <div className="flex items-center px-8 h-full overflow-x-auto">

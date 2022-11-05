@@ -1,8 +1,10 @@
 import TextField from '@mui/material/TextField';
+import RadioGroup from '@mui/material/RadioGroup';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import InputAdornment from '@mui/material/InputAdornment';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Controller, useFormContext } from 'react-hook-form';
+import { FormControlLabel, FormLabel, Radio } from '@mui/material';
 
 function StudentInfo(props) {
   const methods = useFormContext();
@@ -13,16 +15,16 @@ function StudentInfo(props) {
     <div>
       <Controller
         control={control}
-        name="studentCode"
+        name="code"
         render={({ field }) => (
           <TextField
             className="mt-32"
             {...field}
             label="Student Code"
             placeholder="Student Code"
-            id="studentCode"
-            error={!!errors.studentCode}
-            helperText={errors?.studentCode?.message}
+            id="code"
+            error={!!errors.code}
+            helperText={errors?.code?.message}
             variant="outlined"
             required
             fullWidth
@@ -108,6 +110,21 @@ function StudentInfo(props) {
           />
         )}
       />
+      <>
+        <FormLabel component="legend" className="mt-32">
+          Gender
+        </FormLabel>
+        <Controller
+          control={control}
+          name="gender"
+          render={({ field }) => (
+            <RadioGroup {...field} row className="">
+              <FormControlLabel value="0" control={<Radio />} label="Male" />
+              <FormControlLabel value="1" control={<Radio />} label="Female" />
+            </RadioGroup>
+          )}
+        />
+      </>
       <Controller
         control={control}
         name="birthdate"

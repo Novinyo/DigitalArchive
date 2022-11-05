@@ -15,22 +15,11 @@ export const getDocumentType = createAsyncThunk(
             code: data.code,
             name: data.name,
             description: data.description,
-            categoryId: data.category,
-            active: data.active,
+            isActive: data.active,
           };
     } catch (error) {
       return error.response;
     }
-  }
-);
-
-export const getCategories = createAsyncThunk(
-  'setupApp/getCategories',
-  async (params, { getState }) => {
-    const response = await axios.get('/api/DocumentTypes/categories');
-
-    const data = await response.data;
-    return data;
   }
 );
 
@@ -55,11 +44,8 @@ export const saveDocumentType = createAsyncThunk(
       code: doc.code.trim().toUpperCase(),
       name: doc.name.trim().toUpperCase(),
       description: doc.description.trim(),
-      category: doc.categoryId.trim().toUpperCase(),
-      active: doc.active,
+      active: doc.isActive,
     };
-
-    console.log(docData);
 
     try {
       const response =
@@ -110,7 +96,6 @@ const documentTypeSlice = createSlice({
     [getDocumentType.fulfilled]: (state, action) => action.payload,
     [saveDocumentType.fulfilled]: (state, action) => action.payload,
     [checkIfExists.fulfilled]: (state, action) => action.payload,
-    [getCategories.fulfilled]: (state, action) => action.payload,
     [deleteDocumentType.fulfilled]: (state, action) => null,
   },
 });

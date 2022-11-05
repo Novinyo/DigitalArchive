@@ -10,11 +10,19 @@ namespace API.Controllers
     public class StaffController: BaseApiController
     {
         [HttpGet("staffs")]
-        public async Task<IActionResult> GetStaffs(CancellationToken ct)
+        public async Task<IActionResult> GetAllStaffs(CancellationToken ct)
         {
             var result = await Mediator.Send(new All.Query(), ct);
             return HandleResult(result);
         }
+
+        [HttpGet("staffs/{schoolId}")]
+        public async Task<IActionResult> GetStaffs(Guid schoolId, CancellationToken ct)
+        {
+            var result = await Mediator.Send(new AllBySchool.Query{SchoolId = schoolId}, ct);
+            return HandleResult(result);
+        }
+
          [HttpGet("{id}")]
         public async Task<IActionResult> GetStaffById(Guid id)
         {
@@ -25,9 +33,9 @@ namespace API.Controllers
 
         
         [HttpPost]
-        public async Task<IActionResult> AddStaff(StaffWDto entityType, CancellationToken ct)
+        public async Task<IActionResult> AddStaff(StaffWDto entity, CancellationToken ct)
         {
-            var result = await Mediator.Send(new Create.Command { Staff = entityType }, ct);
+            var result = await Mediator.Send(new Create.Command { Staff = entity }, ct);
 
             return HandleResult(result);
         }

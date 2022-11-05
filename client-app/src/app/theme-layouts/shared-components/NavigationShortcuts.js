@@ -1,26 +1,17 @@
-import { useDispatch, useSelector } from 'react-redux';
-import FuseShortcuts from '@fuse/core/FuseShortcuts';
-import { selectFlatNavigation } from 'app/store/fuse/navigationSlice';
-import { selectUserShortcuts, updateUserShortcuts } from 'app/store/userSlice';
+import { useEffect, useState } from 'react';
+import Typography from '@mui/material/Typography';
 
 function NavigationShortcuts(props) {
-  const { variant, className } = props;
-  const dispatch = useDispatch();
-  const shortcuts = useSelector(selectUserShortcuts) || [];
-  const navigation = useSelector(selectFlatNavigation);
-
-  function handleShortcutsChange(newShortcuts) {
-    dispatch(updateUserShortcuts(newShortcuts));
-  }
+  const [school, setSchool] = useState({});
+  useEffect(() => {
+    const val = window.localStorage.getItem('school');
+    setSchool(JSON.parse(val));
+  }, []);
 
   return (
-    <FuseShortcuts
-      className={className}
-      variant={variant}
-      navigation={navigation}
-      shortcuts={shortcuts}
-      onChange={handleShortcutsChange}
-    />
+    <Typography className="text-3xl font-semibold tracking-tight leading-8">
+      {school.name}
+    </Typography>
   );
 }
 

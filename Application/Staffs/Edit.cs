@@ -38,15 +38,15 @@ namespace Application.Staffs
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
             private readonly UserManager<AppUser> _userManager;
-            private readonly CustomSettings _customSettings;
+            private readonly IDocumentConverter _converter;
             public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper,
-            IOptions<CustomSettings> customSettings, UserManager<AppUser> userManager)
+            IDocumentConverter converter, UserManager<AppUser> userManager)
             {
                 _mapper = mapper;
                 _context = context;
                 _userAccessor = userAccessor;
                 _userManager = userManager;
-                _customSettings = customSettings.Value;
+                _converter = converter;
             }
 
             public async Task<Result<StaffRDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -72,16 +72,16 @@ namespace Application.Staffs
                     if (existingUser.Email == request.Staff.User.Email && existingUser.Id != request.Staff.User.UserId)
                         return Result<StaffRDto>.Failure("Email already exists", (int)HttpStatusCode.BadRequest);
 
-                    var folderPath = $"{_customSettings.FilePath}\\{school.Code}";
+                    var folderPath = $"{school.Code}";
                     if (existingUser.ProfilePicture?.Length > 0)
                     {
-                        var isDeleted = DocumentConverter.DeleteFile(existingUser.ProfilePicture, folderPath);
+                        var isDeleted = _converter.DeleteFile(existingUser.ProfilePicture, folderPath);
                     }
                     var path = "";
-                    if (request.Staff.User.Avatar.IndexOf("base64") != -1)
+                    if (request.Staff.User.Avatar != null && request.Staff.User.Avatar.IndexOf("base64") != -1)
                     {
                         var fileName = $"{request.Staff.User.Username}_{school.Code}";
-                        path = DocumentConverter.SaveImage(request.Staff.User.Avatar, folderPath, fileName);
+                        path = _converter.SaveImage(request.Staff.User.Avatar, folderPath, fileName);
                         existingUser.ProfilePicture = path != "" ? path : "";
                     }
                     existingUser.Email = request.Staff.User.Email.Trim();

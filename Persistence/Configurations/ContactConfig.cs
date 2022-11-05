@@ -12,7 +12,6 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Contact> builder)
         {
-            builder.Property(x => x.Code).HasMaxLength(50).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.CreatedBy).IsRequired().HasMaxLength(150);
             builder.Property(x => x.ModifiedBy).HasMaxLength(150);

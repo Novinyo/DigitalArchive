@@ -63,6 +63,7 @@ const ContactForm = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
+  const [school, setSchool] = useState({});
 
   const methods = useForm({
     mode: 'onChange',
@@ -72,6 +73,11 @@ const ContactForm = (props) => {
   const { control, watch, reset, handleSubmit, formState, getValues } = methods;
   const { isValid, dirtyFields, errors } = formState;
   const form = watch();
+
+  useEffect(() => {
+    const userSchool = JSON.parse(localStorage.getItem('school'));
+    setSchool(userSchool.schoolId);
+  }, []);
 
   useEffect(() => {
     if (routeParams.id === 'new') {
@@ -209,11 +215,10 @@ const ContactForm = (props) => {
                     src={
                       value ||
                       (contact.avatar &&
-                        `assets/images/avatars/${contact.schoolCode}/${contact.avatar}`)
+                        `https://localhost:5001/documents/images/${contact.schoolCode}/${contact.avatar}`)
                     }
                     alt={contact.firstName}
                   >
-                    {console.log(contact)}
                     {contact.firstName.charAt(0)}
                   </Avatar>
                 </Box>
@@ -239,7 +244,7 @@ const ContactForm = (props) => {
             <BasicInfoTab />
           </div>
           <div className={tabValue !== 1 ? 'hidden' : ''}>
-            <EmploymentTab staffTypes={tags} schools={schools} />
+            <EmploymentTab staffTypes={tags} schools={schools} schoolId={school} />
           </div>
           <div className={tabValue !== 2 ? 'hidden' : ''}>
             <AdditionalTab />

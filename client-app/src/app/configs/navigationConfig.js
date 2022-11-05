@@ -4,6 +4,8 @@ import fr from './navigation-i18n/fr';
 
 i18next.addResourceBundle('en', 'navigation', en);
 i18next.addResourceBundle('fr', 'navigation', fr);
+const userSchool = localStorage.getItem('school');
+const school = userSchool === 'undefined' ? null : JSON.parse(userSchool);
 
 const navigationConfig = [
   {
@@ -24,48 +26,43 @@ const navigationConfig = [
     type: 'collapse',
     icon: 'heroicons-outline:cog',
     children: [
-      {
-        id: 'school_el',
-        title: 'Schools',
-        type: 'collapse',
-        subtitle: 'School types...',
-        icons: 'heroicons-outline:star',
-        children: [
-          {
-            id: 'schooltypes',
-            title: 'School Types',
-            type: 'item',
-            url: '/setup/schooltypes',
-          },
-          {
-            id: 'schools',
+      school?.schoolId === null
+        ? {
+            id: 'school_el',
             title: 'Schools',
-            type: 'item',
-            url: '/setup/schools',
-          },
-        ],
-      },
-      {
-        id: 'student_el',
-        title: 'Students',
-        type: 'collapse',
-        subtitle: 'Student types...',
-        icons: 'heroicons-outline:star',
-        children: [
-          // {
-          //   id: 'studenttypes',
-          //   title: 'Student Types',
-          //   type: 'item',
-          //   url: '/setup/studenttypes',
-          // },
-          {
-            id: 'students',
+            type: 'collapse',
+            subtitle: 'School types...',
+            icons: 'heroicons-outline:star',
+            children: [
+              {
+                id: 'schooltypes',
+                title: 'School Types',
+                type: 'item',
+                url: '/setup/schooltypes',
+              },
+              {
+                id: 'schools',
+                title: 'Schools',
+                type: 'item',
+                url: '/setup/schools',
+              },
+            ],
+          }
+        : {
+            id: 'student_el',
             title: 'Students',
-            type: 'item',
-            url: '/setup/students',
+            type: 'collapse',
+            subtitle: 'Student types...',
+            icons: 'heroicons-outline:star',
+            children: [
+              {
+                id: 'students',
+                title: 'Students',
+                type: 'item',
+                url: '/setup/students',
+              },
+            ],
           },
-        ],
-      },
       {
         id: 'staff_el',
         title: 'Staffs',
@@ -100,12 +97,6 @@ const navigationConfig = [
             type: 'item',
             url: '/setup/documenttypes',
           },
-          // {
-          //   id: 'staffs',
-          //   title: 'Staffs',
-          //   type: 'item',
-          //   url: '/setup/contacts',
-          // },
         ],
       },
     ],

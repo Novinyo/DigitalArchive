@@ -16,12 +16,12 @@ namespace Application.Students
 {
     public class Details
     {
-         public class Query : IRequest<Result<EntityTypeDto>>
+         public class Query : IRequest<Result<StudentDto>>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Result<EntityTypeDto>>
+        public class Handler : IRequestHandler<Query, Result<StudentDto>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -32,13 +32,13 @@ namespace Application.Students
                 this._mapper = mapper;
             }
 
-            public async Task<Result<EntityTypeDto>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<StudentDto>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var studentType = await _context.StudentTypes
-                .ProjectTo<EntityTypeDto>(_mapper.ConfigurationProvider)
+                var student = await _context.Students.Include(x => x.Contact)
+                .ProjectTo<StudentDto>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-                return Result<EntityTypeDto>.Success(studentType, (int)HttpStatusCode.OK);
+                return Result<StudentDto>.Success(student, (int)HttpStatusCode.OK);
             }
         }
     }

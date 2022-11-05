@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider';
 import { selectFilteredStudents, selectGroupedFilteredStudents } from './store/studentsSlice';
 import StudentListItem from './StudentListItem';
 
-function ContactsList(props) {
+function StudentsList(props) {
   const filteredData = useSelector(selectFilteredStudents);
   const groupedFilteredStudents = useSelector(selectGroupedFilteredStudents);
 
@@ -39,7 +39,7 @@ function ContactsList(props) {
             <Divider />
             <List className="w-full m-0 p-0">
               {group.children.map((item) => (
-                <StudentListItem key={item.id} contact={item} />
+                <StudentListItem key={item.id} student={item} />
               ))}
             </List>
           </div>
@@ -49,4 +49,4 @@ function ContactsList(props) {
   );
 }
 
-export default ContactsList;
+export default StudentsList;

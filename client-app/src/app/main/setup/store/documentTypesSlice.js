@@ -6,9 +6,9 @@ export const getDocumentTypes = createAsyncThunk('setupApp/getDocumentTypes', as
     const response = active
       ? await axios.get('/api/DocumentTypes/activedocumentTypes')
       : await axios.get('/api/DocumentTypes/documentTypes');
+
     return response.data;
   } catch (error) {
-    console.log(error);
     return {
       error: {
         status: error.response.status,

@@ -6,9 +6,7 @@ import JwtService from '../../auth/services/jwtService';
 
 function SignOutPage() {
   useEffect(() => {
-    setTimeout(() => {
-      JwtService.logout();
-    }, 1000);
+    JwtService.logout();
   }, []);
 
   return (

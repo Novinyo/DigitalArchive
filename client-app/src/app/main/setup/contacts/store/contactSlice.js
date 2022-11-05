@@ -22,6 +22,7 @@ export const getContact = createAsyncThunk(
 export const addContact = createAsyncThunk(
   'setupApp/contacts/addContact',
   async (contact, { dispatch, getState }) => {
+    console.log(contact);
     const staff = {
       title: contact.title,
       dob: contact.birthdate,

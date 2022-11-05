@@ -4,16 +4,19 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Application.Core
 {
-    public static class DocumentConverter
+    public class DocumentConverter: Interfaces.IDocumentConverter
     {
-        static DocumentConverter()
-        {
+        private readonly IWebHostEnvironment _hostEnv;
 
+        public DocumentConverter(IWebHostEnvironment hostEnv)
+        {
+            _hostEnv = hostEnv;
         }
-        public static string LoadBase64String(string fileName, string folderPath)
+        public string LoadBase64String(string fileName, string folderPath)
         {
             byte[] imageArray = File.ReadAllBytes(Path.Combine(folderPath, fileName));
 
@@ -22,28 +25,30 @@ namespace Application.Core
 
             return base64String;
         }
-        public static string SaveImage(string base64, string folderPath, string name)
+        public string SaveImage(string base64, string schoolCode, string name)
         {
             try
             {
-                var fileType = base64.IndexOf("png") != -1 ? "png": 
+                var fileExtension = base64.IndexOf("png") != -1 ? "png": 
                 ((base64.IndexOf("jpeg") != -1 || base64.IndexOf("jpg") != -1) ? "jpg": "");
                 
-                if(fileType == "") return "";
+                if(fileExtension == "") return "";
 
-                var ProfilePictures = $"{folderPath}";
-                if (!Directory.Exists(folderPath))
-                    Directory.CreateDirectory(folderPath);
+                var ProfilePictures = $"{schoolCode}";
+                var path = Path.Combine(_hostEnv.ContentRootPath, "Documents\\Images", schoolCode);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
                 
 
                 Regex regex=new Regex(@"^[\w/\:.-]+;base64,");
                 base64=regex.Replace(base64,string.Empty);
 
                 byte[] bytes = Convert.FromBase64String(base64);
-                var filePath = $"{folderPath}\\{name}.{fileType}";
-                File.WriteAllBytes(filePath, bytes);
+                var filePath = $"{name}.{fileExtension}";
+                var imagePath = Path.Combine(path, filePath);
+                File.WriteAllBytes(imagePath, bytes);
 
-                return $"{name}.{fileType}";
+                return $"{name}.{fileExtension}";
             }
             catch (System.Exception ex)
             {
@@ -52,7 +57,7 @@ namespace Application.Core
             }
         }
 
-        public static bool DeleteFile(string fileName, string path)
+        public bool DeleteFile(string fileName, string path)
         {
             try
             {

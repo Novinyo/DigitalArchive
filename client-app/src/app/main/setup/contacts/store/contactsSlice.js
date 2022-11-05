@@ -11,7 +11,12 @@ import { addContact, removeContact, updateContact } from './contactSlice';
 export const getContacts = createAsyncThunk(
   'setupApp/contacts/getContacts',
   async (params, { getState }) => {
-    const response = await axios.get('/api/staff/staffs');
+    const school = JSON.parse(localStorage.getItem('school'));
+
+    const url =
+      school.schoolId === null ? '/api/staff/staffs' : `/api/staff/staffs/${school.schoolId}`;
+
+    const response = await axios.get(url);
 
     const data = await response.data;
 

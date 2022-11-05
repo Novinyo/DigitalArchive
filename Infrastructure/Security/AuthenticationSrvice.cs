@@ -97,7 +97,8 @@ namespace Infrastructure.Security
             else if(userRoles.Any(x => x == Roles.Admin.ToString()))
             {
                 roles = await _roleManager.Roles.Where(x =>  (x.Name != Roles.SuperAdmin.ToString()
-                 && x.Name != Roles.Admin.ToString())).ToListAsync();
+                 //&& x.Name != Roles.Admin.ToString()
+                 )).ToListAsync();
             }
 
             foreach(var role in roles)

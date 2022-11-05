@@ -30,9 +30,9 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStudent(EntityTypeAddDto entityType, CancellationToken ct)
+        public async Task<IActionResult> AddStudent(StudentWDto student, CancellationToken ct)
         {
-            var result = await Mediator.Send(new Create.Command { StudentType = entityType }, ct);
+            var result = await Mediator.Send(new Create.Command { Student = student }, ct);
 
             return HandleResult(result);
         }
@@ -46,10 +46,10 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditStudent(Guid id, EntityTypeAddDto entityType)
+        public async Task<IActionResult> EditStudent(Guid id, StudentWDto student)
         {
-            entityType.Id = id;
-            return HandleResult(await Mediator.Send(new Edit.Command { StudentType = entityType }));
+            student.Id = id;
+            return HandleResult(await Mediator.Send(new Edit.Command { Student = student }));
         }
 
         [HttpDelete("{id}")]

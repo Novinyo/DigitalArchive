@@ -7,7 +7,6 @@ namespace Domain
 {
     public class Contact:BaseEntity
     {
-        public string Code { get; set; }
         public string FatherFirstName { get; set; }
         public string FatherLastName { get; set; }
         public string MotherFirstName { get; set; }
