@@ -24,6 +24,8 @@ namespace Persistence.Configurations
             builder.Property(x => x.DateJoined).IsRequired();
             builder.Property(x => x.ModifiedBy).HasMaxLength(150);
             builder.Property(x => x.DeletedBy).HasMaxLength(150);
+            builder.Property(x => x.ConditionRemarks).HasMaxLength(400);
+            builder.Property(x => x.Description).HasMaxLength(400);
         }
     }
 }

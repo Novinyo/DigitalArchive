@@ -8,6 +8,7 @@ using Application.Documents.Type;
 using Application.Schools;
 using Application.Schools.Type;
 using Application.Staffs.Dtos;
+using Application.Students;
 using AutoMapper;
 using Domain;
 using Microsoft.AspNetCore.Identity;
@@ -25,7 +26,6 @@ namespace Application.Core
             .ReverseMap();
 
             CreateMap<StaffType, EntityTypeDto>();
-           // .ForMember(dto => dto.SchoolName, s => s.MapFrom(t => t.School.Name));
             
              CreateMap<EntityTypeAddDto, StaffType>();
 
@@ -38,7 +38,16 @@ namespace Application.Core
             .ForMember(x => x.Avatar, u => u.MapFrom(u => u.ProfilePicture));
 
             CreateMap<Student, Students.StudentDto>()
-            .ForMember(x => x.SchoolName, st => st.MapFrom(x => x.School.Name));
+            .ForMember(x => x.SchoolName, st => st.MapFrom(x => x.School.Name))
+            .ForMember(x => x.Birthdate, st => st.MapFrom(x => x.DOB));
+
+            CreateMap<StudentWDto, Student>()
+            .ForMember(x => x.DOB, st => st.MapFrom(s => s.DateOfBirth))
+            .ForMember(x => x.HaveMedicalCondition, st => st.MapFrom(s => s.HaveMedicalCondition))
+            .ForMember(x => x.ConditionRemarks, st => st.MapFrom(s => s.ConditionRemarks));
+
+            CreateMap<Contact, ContactDto>().ReverseMap();
+
             CreateMap<Staff, Staffs.StaffRDto>()
             .ForMember(s => s.SchoolId, sr => sr.MapFrom(s => s.School.Id))
             .ForMember(s => s.Birthdate, sr => sr.MapFrom(s => s.DOB))

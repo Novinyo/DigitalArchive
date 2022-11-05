@@ -40,10 +40,10 @@ export const selectGroupedFilteredStudents = createSelector(
   [selectFilteredStudents],
   (students) => {
     return students
-      .sort((a, b) => a.lastName.localeCompare(b.lastName, 'es', { sensitivity: 'base' }))
+      .sort((a, b) => a?.lastName?.localeCompare(b?.lastName, 'es', { sensitivity: 'base' }))
       .reduce((r, e) => {
         // get first letter of name of current element
-        const group = e.lastName[0];
+        const group = e.lastName !== 'undefined' ? e.lastName[0] : '';
         // if there is no property in accumulator with this letter create it
         if (!r[group]) r[group] = { group, children: [e] };
         // if there is push current element to children array for that letter

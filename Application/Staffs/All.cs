@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,7 +16,9 @@ namespace Application.Staffs
 {
     public class All
     {
-        public class Query : IRequest<Result<List<StaffRDto>>> { }
+        public class Query : IRequest<Result<List<StaffRDto>>>
+        {
+        }
 
         public class Handler : IRequestHandler<Query, Result<List<StaffRDto>>>
         {
@@ -31,7 +35,7 @@ namespace Application.Staffs
                 var staffs = await _context.Staffs
                 .ProjectTo<StaffRDto>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-                
+
                 return Result<List<StaffRDto>>.Success(staffs, (int)HttpStatusCode.OK);
             }
         }

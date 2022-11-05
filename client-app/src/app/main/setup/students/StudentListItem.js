@@ -5,6 +5,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import NavLinkAdapter from '@fuse/core/NavLinkAdapter';
+import { format } from 'date-fns';
 
 function StudentListItem(props) {
   const { student } = props;
@@ -21,12 +22,12 @@ function StudentListItem(props) {
         <ListItemAvatar>
           <Avatar
             alt={student.firstName}
-            src={`assets/images/avatars/${student.schoolCode}/${student?.avatar}`}
+            src={`assets/images/avatars/${student.code}/${student?.avatar}`}
           />
         </ListItemAvatar>
         <ListItemText
           classes={{ root: 'm-0', primary: 'font-medium leading-5 truncate' }}
-          primary={`${student.firstName} ${student.lastName}`}
+          primary={`${student.firstName} ${student.middleName} ${student.lastName}`}
           secondary={
             <>
               <Typography
@@ -35,7 +36,16 @@ function StudentListItem(props) {
                 variant="body2"
                 color="text.secondary"
               >
-                {student.schoolName}
+                {student.gender === 0 ? 'Male' : 'Female'}
+              </Typography>
+              &nbsp;--&nbsp;
+              <Typography
+                className="inline"
+                component="span"
+                variant="body2"
+                color="text.secondary"
+              >
+                {format(new Date(student.dateJoined), 'MM/dd/yyyy')}
               </Typography>
             </>
           }

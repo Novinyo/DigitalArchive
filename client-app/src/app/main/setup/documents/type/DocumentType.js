@@ -38,7 +38,6 @@ const schema = yup.object().shape({
     .string()
     .required('You must enter a school type name')
     .min(3, 'The school type name must be at least 3 characters'),
-  categoryId: yup.string().required('You must choose a category').max(1, 'Select a valid category'),
   isActive: yup.boolean(),
 });
 

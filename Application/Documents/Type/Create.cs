@@ -26,7 +26,6 @@ namespace Application.Documents.Type
             {
                 RuleFor(x => x.DocumentType.Code).NotEmpty();
                 RuleFor(x => x.DocumentType.Name).NotEmpty();
-                RuleFor(x => x.DocumentType.Category).NotEmpty();
             }
         }
 

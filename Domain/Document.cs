@@ -7,7 +7,6 @@ namespace Domain
 {
     public class Document: BaseEntity
     {
-        public string Code { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public DocumentType DocumentType { get; set; }

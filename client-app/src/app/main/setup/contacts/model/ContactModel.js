@@ -1,5 +1,7 @@
 import _ from '@lodash';
 
+const val = localStorage.getItem('school');
+const userSchool = val === 'undefined' ? null : JSON.parse(val);
 const ContactModel = (data) =>
   _.defaults(data || {}, {
     avatar: null,
@@ -19,7 +21,7 @@ const ContactModel = (data) =>
     hasMedicalRecord: false,
     medicalNotes: '',
     staffTypeId: '',
-    schoolId: '',
+    schoolId: userSchool.schoolId === null ? '' : userSchool.schoolId,
     roles: [],
   });
 

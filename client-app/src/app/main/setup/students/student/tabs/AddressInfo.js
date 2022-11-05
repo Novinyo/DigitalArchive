@@ -4,13 +4,16 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Controller, useFormContext } from 'react-hook-form';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function AddressInfo(props) {
   const methods = useFormContext();
   const { control, formState } = methods;
   const { isValid, dirtyFields, errors } = formState;
 
+  useEffect(() => {
+    setCanView(control._defaultValues.hasMedicalRecord);
+  }, []);
   const [canView, setCanView] = useState(false);
 
   const handleSwitch = (evt) => {

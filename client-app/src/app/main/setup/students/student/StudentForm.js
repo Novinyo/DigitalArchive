@@ -8,12 +8,9 @@ import { useEffect, useState } from 'react';
 import FuseLoading from '@fuse/core/FuseLoading';
 import _ from '@lodash';
 import * as yup from 'yup';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
 import Box from '@mui/system/Box';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
 
 import {
   addStudent,
@@ -35,22 +32,33 @@ const date = new Date();
 const maxDate = new Date(date.getFullYear() - 4, date.getMonth(), date.getDate());
 
 const schema = yup.object().shape({
-  username: yup.string().required('You must enter a username'),
-  firstName: yup.string().required('You must enter a first name'),
+  code: yup.string().required('You must enter a student code'),
+  firstName: yup.string().required("Student's first name is required"),
   middleName: yup.string(),
-  lastName: yup.string().required('You must enter a first name'),
-  email: yup.string().email('You must enter a valid email').required('You must enter a email'),
-  phoneNumber: yup.string(),
+  lastName: yup.string().required("Student's last name is required"),
+  faFName: yup.string().required("Father's first name is required"),
+  faLName: yup.string().required("Father's last name is required"),
+  moFName: yup.string().required("Mother's first name is required"),
+  moLName: yup.string().required("Mother's last name is required"),
+  faEmail: yup
+    .string()
+    .email('You must enter a valid email')
+    .required("Father's email is required"),
+  moEmail: yup
+    .string()
+    .email('You must enter a valid email')
+    .required("Mother's email is required"),
+  faPhone: yup.string().required("Father's phone number is required"),
+  moPhone: yup.string().required("Mother's phone number is required"),
   birthdate: yup
     .date()
-    .max(new Date(maxDate), 'Staff must be 4 and above')
+    .max(new Date(maxDate), 'Student must be 4 and above')
     .required('Date of birth is required'),
   dateJoined: yup
     .date()
     .max(new Date(), 'Student entrance date cannot be in the future')
     .required('You must select a hire date'),
-  staffTypeId: yup.string().required('Please select a valid option'),
-  schoolId: yup.string().required('Please select a valid school'),
+  emergencyContact: yup.string().required('Kindly provide an emergency contact'),
 });
 
 const StudentForm = (props) => {
@@ -87,10 +95,12 @@ const StudentForm = (props) => {
   function onSubmit(data) {
     if (routeParams.id === 'new') {
       dispatch(addStudent(data)).then(({ payload }) => {
+        console.log(payload);
         navigate(`/setup/students/${payload.id}`);
       });
     } else {
-      dispatch(updateStudent(data)).then(({ payload }) => {
+      dispatch(updateStudent(data, routeParams.id)).then(({ payload }) => {
+        console.log(payload);
         navigate(`/setup/students/${payload.id}`);
       });
     }
@@ -123,95 +133,7 @@ const StudentForm = (props) => {
           alt="user background"
         />
       </Box>
-      <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
-        <div className="w-full">
-          <div className="flex flex-auto items-end -mt-64">
-            <Controller
-              control={control}
-              name="avatar"
-              render={({ field: { onChange, value } }) => (
-                <Box
-                  sx={{
-                    borderWidth: 4,
-                    borderStyle: 'solid',
-                    borderColor: 'background.paper',
-                  }}
-                  className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
-                  <div className="absolute inset-0 flex items-center justify-center z-20">
-                    <div>
-                      <label htmlFor="button-avatar" className="flex p-8 cursor-pointer">
-                        <input
-                          accept="image/png, image/jpeg"
-                          className="hidden"
-                          id="button-avatar"
-                          type="file"
-                          onChange={async (e) => {
-                            function readFileAsync() {
-                              return new Promise((resolve, reject) => {
-                                const file = e.target.files[0];
-                                if (!file) {
-                                  return;
-                                }
-                                if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
-                                  alert('Only jpeg or png files are allowed');
-                                  return;
-                                }
-                                if (file.size > 5000000) {
-                                  alert('File size cannot exceed 5MB');
-                                  return;
-                                }
-                                const reader = new FileReader();
-
-                                reader.onload = () => {
-                                  resolve(`data:${file.type};base64,${window.btoa(reader.result)}`);
-                                };
-
-                                reader.onerror = reject;
-
-                                reader.readAsBinaryString(file);
-                              });
-                            }
-
-                            const newImage = await readFileAsync();
-
-                            onChange(newImage);
-                          }}
-                        />
-                        <FuseSvgIcon className="text-white">heroicons-outline:camera</FuseSvgIcon>
-                      </label>
-                    </div>
-                    <div>
-                      <IconButton
-                        onClick={() => {
-                          onChange('');
-                        }}
-                      >
-                        <FuseSvgIcon className="text-white">heroicons-solid:trash</FuseSvgIcon>
-                      </IconButton>
-                    </div>
-                  </div>
-                  <Avatar
-                    sx={{
-                      backgroundColor: 'background.default',
-                      color: 'text.secondary',
-                    }}
-                    className="object-cover w-full h-full text-64 font-bold"
-                    src={
-                      value ||
-                      (student.avatar &&
-                        `assets/images/avatars/${student.schoolCode}/${student.avatar}`)
-                    }
-                    alt={student.firstName}
-                  >
-                    {student.firstName.charAt(0)}
-                  </Avatar>
-                </Box>
-              )}
-            />
-          </div>
-        </div>
+      <div className="relative flex flex-col flex-auto px-24 sm:px-48">
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -220,7 +142,7 @@ const StudentForm = (props) => {
           scrollButtons="auto"
           classes={{ root: 'w-full h-64 border-b-1' }}
         >
-          <Tab className="h-64" label="Basic Info" />
+          <Tab className="h-64" label="Student Info" />
           <Tab className="h-64" label="Parent Info" />
           <Tab className="h-64" label="Health & Address" />
           <Tab className="h-64" label="Documents" />

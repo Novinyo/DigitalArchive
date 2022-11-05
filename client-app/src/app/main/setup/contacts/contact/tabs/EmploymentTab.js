@@ -9,7 +9,7 @@ function EmploymentTab(props) {
   const methods = useFormContext();
   const { control, formState } = methods;
   const { errors } = formState;
-  const { staffTypes, schools } = props;
+  const { staffTypes, schools, schoolId } = props;
 
   return (
     <div>
@@ -139,30 +139,34 @@ function EmploymentTab(props) {
           />
         )}
       />
-      <Controller
-        control={control}
-        name="schoolId"
-        render={({ field }) => (
-          <TextField
-            select
-            className="mt-32"
-            {...(field ?? '')}
-            label="School"
-            id="schoolId"
-            error={!!errors.schoolId}
-            required
-            helperText={errors?.schoolId?.message}
-            variant="outlined"
-            fullWidth
-          >
-            {schools.map((item) => (
-              <MenuItem key={item.id} value={item.id}>
-                {item.name}
-              </MenuItem>
-            ))}
-          </TextField>
-        )}
-      />
+      {schoolId === null ? (
+        <Controller
+          control={control}
+          name="schoolId"
+          render={({ field }) => (
+            <TextField
+              select
+              className="mt-32"
+              {...(field ?? '')}
+              label="School"
+              id="schoolId"
+              error={!!errors.schoolId}
+              required
+              helperText={errors?.schoolId?.message}
+              variant="outlined"
+              fullWidth
+            >
+              {schools.map((item) => (
+                <MenuItem key={item.id} value={item.id}>
+                  {item.name}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

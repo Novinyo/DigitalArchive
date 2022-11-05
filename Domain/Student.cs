@@ -18,6 +18,10 @@ namespace Domain
         public DateTime DateJoined { get; set; }
         public DateTime? DateLeft { get; set; }
         public Contact Contact { get; set; }
+        public bool HaveMedicalCondition { get; set; }
+        public string ConditionRemarks { get; set; }
+        public string Description { get; set; }
+
         public ICollection<Document> Documents { get; set; } = new List<Document>();
     }
 }

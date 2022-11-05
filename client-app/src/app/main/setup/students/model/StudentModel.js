@@ -2,8 +2,8 @@ import _ from '@lodash';
 
 const StudentModel = (data) =>
   _.defaults(data || {}, {
-    avatar: null,
-    studentCode: '',
+    studentId: '',
+    code: '',
     firstName: '',
     middleName: '',
     lastName: '',
@@ -15,6 +15,7 @@ const StudentModel = (data) =>
     moEmail: '',
     faPhone: '',
     moPhone: '',
+    gender: 0,
     birthdate: null,
     dateJoined: null,
     emergencyContact: '',

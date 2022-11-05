@@ -10,7 +10,34 @@ export const getStudent = createAsyncThunk(
       const response = await axios.get(`/api/students/${id}`);
 
       const data = await response.data;
-      return data;
+
+      const student = {
+        studentId: data.id,
+        code: data.code,
+        firstName: data.firstName,
+        middleName: data.middleName,
+        lastName: data.lastName,
+        contactId: data.contact.id,
+        faFName: data.contact.fatherFirstName,
+        faLName: data.contact.fatherLastName,
+        moFName: data.contact.motherFirstName,
+        moLName: data.contact.motherLastName,
+        faEmail: data.contact.fatherEmail,
+        moEmail: data.contact.motherEmail,
+        faPhone: data.contact.fatherPhoneNumber,
+        moPhone: data.contact.motherPhoneNumber,
+        gender: data.gender,
+        birthdate: data.birthdate,
+        dateJoined: data.dateJoined,
+        emergencyContact: data.contact.emergencyContact,
+        streetAddress: data.contact.streetAddress,
+        postalAddress: data.contact.postalAddress,
+        description: data.description === null ? '' : data.description,
+        hasMedicalRecord: data.haveMedicalCondition,
+        medicalNotes: data.conditionRemarks === null ? '' : data.conditionRemarks,
+      };
+
+      return student;
     } catch (error) {
       history.push({ pathname: `/setup/students` });
 
@@ -21,30 +48,34 @@ export const getStudent = createAsyncThunk(
 
 export const addStudent = createAsyncThunk(
   'setupApp/students/addStudent',
-  async (contact, { dispatch, getState }) => {
-    const staff = {
-      title: contact.title,
-      dob: contact.birthdate,
-      dateJoined: contact.dateJoined,
-      staffTypeId: contact.staffTypeId,
-      schoolId: contact.schoolId,
-      user: {
-        avatar: contact.avatar,
-        username: contact.username,
-        firstName: contact.firstName,
-        middleName: contact.middleName,
-        lastName: contact.lastName,
-        email: contact.email,
-        phoneNumber: contact.phoneNumber,
+  async (student, { dispatch, getState }) => {
+    const newStudent = {
+      code: student.code,
+      firstName: student.firstName,
+      middleName: student.middleName,
+      lastName: student.lastName,
+      gender: parseInt(student.gender, 2),
+      dateOfBirth: student.birthdate,
+      dateJoined: student.dateJoined,
+      contact: {
+        fatherFirstName: student.faFName,
+        fatherLastName: student.faLName,
+        fatherPhoneNumber: student.faPhone,
+        fatherEmail: student.faEmail,
+        motherFirstName: student.moFName,
+        motherLastName: student.moLName,
+        motherPhoneNumber: student.moPhone,
+        motherEmail: student.moEmail,
+        emergencyContact: student.emergencyContact,
+        streetAddress: student.streetAddress,
+        postalAddress: student.postalAddress,
       },
-      roles: contact.roles,
-      postalAddress: contact.postalAddress,
-      streetAddress: contact.streetAddress,
-      haveMedicalCondition: contact.hasMedicalRecord,
-      conditionRemarks: contact.haveMedicalCondition ? contact.medicalNotes : '',
-      description: contact.description,
+      haveMedicalCondition: student.hasMedicalRecord,
+      conditionRemarks: student.hasMedicalRecord ? student.medicalNotes : '',
+      description: student.description,
     };
-    const response = await axios.post('/api/Staff', staff);
+
+    const response = await axios.post('/api/students', newStudent);
 
     const data = await response.data;
 
@@ -54,32 +85,36 @@ export const addStudent = createAsyncThunk(
 
 export const updateStudent = createAsyncThunk(
   'setupApp/students/updateStudent',
-  async (contact, { dispatch, getState }) => {
-    const staff = {
-      title: contact.title,
-      dob: contact.birthdate,
-      dateJoined: contact.dateJoined,
-      staffTypeId: contact.staffTypeId,
-      schoolId: contact.schoolId,
-      user: {
-        avatar: contact.avatar,
-        username: contact.username,
-        userId: contact.userId,
-        firstName: contact.firstName,
-        middleName: contact.middleName,
-        lastName: contact.lastName,
-        email: contact.email,
-        phoneNumber: contact.phoneNumber,
+  async (student, { dispatch, getState }) => {
+    const oldStudent = {
+      id: student.studentId,
+      code: student.code,
+      firstName: student.firstName,
+      middleName: student.middleName,
+      lastName: student.lastName,
+      gender: parseInt(student.gender, 2),
+      dateOfBirth: student.birthdate,
+      dateJoined: student.dateJoined,
+      contact: {
+        fatherFirstName: student.faFName,
+        fatherLastName: student.faLName,
+        fatherPhoneNumber: student.faPhone,
+        fatherEmail: student.faEmail,
+        motherFirstName: student.moFName,
+        motherLastName: student.moLName,
+        motherPhoneNumber: student.moPhone,
+        motherEmail: student.moEmail,
+        emergencyContact: student.emergencyContact,
+        streetAddress: student.streetAddress,
+        postalAddress: student.postalAddress,
+        id: student.contactId,
       },
-      roles: contact.roles,
-      postalAddress: contact.postalAddress,
-      streetAddress: contact.streetAddress,
-      haveMedicalCondition: contact.hasMedicalRecord,
-      conditionRemarks: contact.hasMedicalRecord ? contact.medicalNotes : '',
-      description: contact.description,
+      haveMedicalCondition: student.hasMedicalRecord,
+      conditionRemarks: student.hasMedicalRecord ? student.medicalNotes : '',
+      description: student.description,
     };
-    console.log(staff);
-    const response = await axios.put(`/api/students/${contact.id}`, staff);
+
+    const response = await axios.put(`/api/students/${student.studentId}`, oldStudent);
 
     const data = await response.data;
 

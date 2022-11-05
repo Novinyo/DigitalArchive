@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Application.Staffs
 {
@@ -29,15 +30,15 @@ namespace Application.Staffs
             private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
             private readonly UserManager<AppUser> _userManager;
-            private readonly CustomSettings _customSettings;
+            private readonly IDocumentConverter _converter;
             public Handler(DataContext context, IUserAccessor userAccessor, IMapper mapper,
-            IOptions<CustomSettings> customSettings, UserManager<AppUser> userManager)
+             UserManager<AppUser> userManager, IDocumentConverter converter)
             {
                 _userAccessor = userAccessor;
                 _context = context;
                 _mapper = mapper;
                 _userManager = userManager;
-                _customSettings = customSettings.Value;
+                _converter = converter;
             }
 
             public async Task<Result<StaffRDto>> Handle(Command request, CancellationToken cancellationToken)
@@ -65,12 +66,10 @@ namespace Application.Staffs
 
                     var path = "";
 
-                    if (request.Staff.User.Avatar.IndexOf("base64") != -1)
+                    if (request.Staff.User.Avatar != null && request.Staff.User.Avatar.IndexOf("base64") != -1)
                     {
-                        var folderPath = $"{_customSettings.FilePath}\\{school.Code}";
-
                         var fileName = $"{newUser.UserName}_{school.Code}";
-                        path = DocumentConverter.SaveImage(request.Staff.User.Avatar, folderPath, fileName);
+                        path = _converter.SaveImage(request.Staff.User.Avatar, school.Code, fileName);
                     }
                     newUser.ProfilePicture = path != "" ? path : "";
                     newUser.EmailConfirmed = false;

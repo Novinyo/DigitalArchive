@@ -29,7 +29,6 @@ function StudentsApp(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    console.log(routeParams);
     setRightSidebarOpen(Boolean(routeParams.id));
   }, [routeParams]);
 

@@ -9,8 +9,6 @@ namespace Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Document> builder)
         {
-            builder.HasIndex(x => x.Code).IsUnique();
-            builder.Property(x => x.Code).HasMaxLength(20).IsRequired();
 
             builder.HasIndex(x => x.Name).IsUnique();
             builder.Property(x => x.Name).HasMaxLength(50).IsRequired();

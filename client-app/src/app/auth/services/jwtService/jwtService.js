@@ -100,7 +100,9 @@ class JwtService extends FuseUtils.EventEmitter {
         })
         .then((response) => {
           if (response.data.user) {
-            // this.setSession(response.data.access_Token);
+            const { school } = response.data.user.data;
+
+            this.setSession(response.data.access_Token, school);
             resolve(response.data.user);
           } else {
             this.logout();
@@ -133,6 +135,8 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   logout = () => {
+    localStorage.removeItem('jwt_access_token');
+    localStorage.removeItem('school');
     this.setSession(null);
     this.emit('onLogout', 'Logged out');
   };
@@ -153,6 +157,10 @@ class JwtService extends FuseUtils.EventEmitter {
 
   getAccessToken = () => {
     return window.localStorage.getItem('jwt_access_token');
+  };
+
+  getSchoolInfo = () => {
+    return window.localStorage.getItem('school');
   };
 }
 

@@ -217,7 +217,16 @@ function DocumentTypesTable(props) {
                       component="th"
                       scope="row"
                     >
-                      {n.category}
+                      <Typography
+                        sx={{
+                          display: 'inline-block',
+                          maxWidth: '25rem',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                        }}
+                      >
+                        {n.description}
+                      </Typography>
                     </TableCell>
                     <TableCell
                       className="p-4 md:p-16 text-center"
