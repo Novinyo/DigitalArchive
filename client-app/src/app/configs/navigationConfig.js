@@ -5,8 +5,9 @@ import fr from './navigation-i18n/fr';
 i18next.addResourceBundle('en', 'navigation', en);
 i18next.addResourceBundle('fr', 'navigation', fr);
 const userSchool = localStorage.getItem('school');
+console.log(userSchool)
 const school = userSchool === 'undefined' ? null : JSON.parse(userSchool);
-
+console.log(school)
 const navigationConfig = [
   {
     id: 'home',

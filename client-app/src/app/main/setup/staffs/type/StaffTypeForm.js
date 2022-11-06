@@ -86,31 +86,7 @@ function StaffTypeForm(props) {
           </>
         )}
       />
-      {/* <Controller
-        name="schoolId"
-        control={control}
-        render={({ field }) => (
-          <>
-            <InputLabel id="lblSchool">School *</InputLabel>
-            <TextField
-              select
-              {...(field ?? '-1')}
-              labelid="lblSchool"
-              id="schoolId"
-              error={!!errors.schoolId}
-              helperText={errors?.schoolId?.message}
-              className="mt-8 mb-16"
-              fullWidth
-            >
-              {schools.map((item) => (
-                <MenuItem key={item.id} value={item.id}>
-                  {item.name}
-                </MenuItem>
-              ))}
-            </TextField>
-          </>
-        )}
-      /> */}
+      
       <Controller
         name="description"
         control={control}

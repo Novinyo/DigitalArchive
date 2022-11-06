@@ -35,7 +35,7 @@ namespace Application.Core
                 if(fileExtension == "") return "";
 
                 var ProfilePictures = $"{schoolCode}";
-                var path = Path.Combine(_hostEnv.ContentRootPath, "Documents\\Images", schoolCode);
+                var path = Path.Combine(_hostEnv.ContentRootPath, "Documents", "Images", schoolCode);
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 

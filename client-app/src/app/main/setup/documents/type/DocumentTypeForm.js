@@ -82,7 +82,7 @@ function DocumentTypeForm(props) {
       />
 
       <Controller
-        name="isActive"
+        name="active"
         control={control}
         render={({ field }) => (
           <>
@@ -91,7 +91,7 @@ function DocumentTypeForm(props) {
               {...field}
               checked={field.value}
               labelid="lblActive"
-              id="isActive"
+              id="active"
               size="small"
             />
           </>

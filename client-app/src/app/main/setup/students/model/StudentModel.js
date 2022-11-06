@@ -25,6 +25,7 @@ const StudentModel = (data) =>
     hasMedicalRecord: false,
     medicalNotes: '',
     schoolId: '',
+    documents:[]
   });
 
 export default StudentModel;

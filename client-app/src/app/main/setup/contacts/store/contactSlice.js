@@ -42,7 +42,7 @@ export const addContact = createAsyncThunk(
       postalAddress: contact.postalAddress,
       streetAddress: contact.streetAddress,
       haveMedicalCondition: contact.hasMedicalRecord,
-      conditionRemarks: contact.haveMedicalCondition ? contact.medicalNotes : '',
+      conditionRemarks: contact.hasMedicalRecord ? contact.medicalNotes : '',
       description: contact.description,
     };
     const response = await axios.post('/api/Staff', staff);

@@ -59,6 +59,7 @@ const schema = yup.object().shape({
     .max(new Date(), 'Student entrance date cannot be in the future')
     .required('You must select a hire date'),
   emergencyContact: yup.string().required('Kindly provide an emergency contact'),
+  documents: yup.array().min(1, 'Select at least one document'),
 });
 
 const StudentForm = (props) => {

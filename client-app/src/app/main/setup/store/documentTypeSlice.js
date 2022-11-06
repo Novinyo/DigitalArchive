@@ -15,7 +15,7 @@ export const getDocumentType = createAsyncThunk(
             code: data.code,
             name: data.name,
             description: data.description,
-            isActive: data.active,
+            active: data.active,
           };
     } catch (error) {
       return error.response;
@@ -44,7 +44,7 @@ export const saveDocumentType = createAsyncThunk(
       code: doc.code.trim().toUpperCase(),
       name: doc.name.trim().toUpperCase(),
       description: doc.description.trim(),
-      active: doc.isActive,
+      active: doc.active,
     };
 
     try {
