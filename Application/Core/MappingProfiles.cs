@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Common;
 using Application.Common.Dtos;
 using Application.Documents.Type;
+using Application.Documents;
 using Application.Schools;
 using Application.Schools.Type;
 using Application.Staffs.Dtos;
@@ -39,12 +40,14 @@ namespace Application.Core
 
             CreateMap<Student, Students.StudentDto>()
             .ForMember(x => x.SchoolName, st => st.MapFrom(x => x.School.Name))
-            .ForMember(x => x.Birthdate, st => st.MapFrom(x => x.DOB));
+            .ForMember(x => x.Birthdate, st => st.MapFrom(x => x.DOB))
+            .ForMember(x => x.Documents, st => st.MapFrom(x => x.Documents));
 
             CreateMap<StudentWDto, Student>()
             .ForMember(x => x.DOB, st => st.MapFrom(s => s.DateOfBirth))
             .ForMember(x => x.HaveMedicalCondition, st => st.MapFrom(s => s.HaveMedicalCondition))
-            .ForMember(x => x.ConditionRemarks, st => st.MapFrom(s => s.ConditionRemarks));
+            .ForMember(x => x.ConditionRemarks, st => st.MapFrom(s => s.ConditionRemarks))
+            .ForMember(x => x.Documents, st => st.MapFrom(s => s.Documents));
 
             CreateMap<Contact, ContactDto>().ReverseMap();
 
@@ -78,6 +81,13 @@ namespace Application.Core
             .ForMember(a => a.ProfilePicture, u => u.MapFrom(u => u.Avatar));
 
             CreateMap<StaffWDto, Staff>();
+
+            CreateMap<Document, DocumentDto>()
+            .ForMember(d => d.DocName, dt => dt.MapFrom(x => x.Name))
+             .ForMember(d => d.DocDesc, dt => dt.MapFrom(x => x.Description))
+            .ForMember(d => d.DocTypeId, dt => dt.MapFrom(x => x.DocumentTypeId))
+             .ForMember(d => d.DocUrl, dt => dt.MapFrom(x => x.DocumentURL))
+             .ReverseMap();
         }
     }
 }

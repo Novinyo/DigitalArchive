@@ -17,7 +17,7 @@ namespace Persistence.Configurations
             builder.Property(x => x.CreatedBy).HasMaxLength(150).IsRequired();
             builder.Property(x => x.CreatedAt).IsRequired();
             builder.Property(x => x.ModifiedBy).HasMaxLength(150);
-            builder.Property(x => x.DocumentURL).HasMaxLength(200).IsRequired();
+            builder.Property(x => x.DocumentURL).HasColumnType("nvarchar(max)").IsRequired();
             builder.Property(x => x.DeletedBy).HasMaxLength(150);
         }
     }

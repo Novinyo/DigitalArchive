@@ -22,6 +22,7 @@
     "@mui/x-data-grid": "5.13.0",
     "@mui/x-date-pickers": "5.0.0-beta.0",
     "@react-pdf-viewer/core": "^3.7.0",
+    "@react-pdf-viewer/thumbnail": "^3.7.0",
     "@reduxjs/toolkit": "1.8.3",
     "apexcharts": "3.35.3",
     "autosuggest-highlight": "3.3.1",

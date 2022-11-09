@@ -10,6 +10,7 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using Persistence;
 
 namespace Application.Students
@@ -81,7 +82,17 @@ namespace Application.Students
                     newStudent.Id = Guid.NewGuid();
                     newStudent.SchoolId = schoolId;
                     newStudent.Contact = contact;
+                    
+                     foreach (var document in newStudent.Documents)
+                    {
+                        document.Active = true;
+                        document.CreatedBy = user.Id;
+                        document.CreatedAt = DateTime.UtcNow;
+                        document.StudentId = newStudent.Id;
+                        document.Id = Guid.NewGuid();
 
+                        _context.Documents.Add(document);
+                    }
                     _context.Students.Add(newStudent);
 
                     var result = await _context.SaveChangesAsync() > 0;

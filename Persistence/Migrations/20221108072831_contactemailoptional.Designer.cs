@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221108072831_contactemailoptional")]
+    partial class contactemailoptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,15 +248,13 @@ namespace Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("DocumentTypeId")
+                    b.Property<Guid?>("DocumentTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DocumentURL")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -270,9 +270,6 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("StaffId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
@@ -884,9 +881,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.DocumentType", "DocumentType")
                         .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DocumentTypeId");
 
                     b.HasOne("Domain.Staff", null)
                         .WithMany("Documents")

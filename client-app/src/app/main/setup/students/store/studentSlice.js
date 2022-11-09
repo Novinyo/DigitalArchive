@@ -35,8 +35,8 @@ export const getStudent = createAsyncThunk(
         description: data.description === null ? '' : data.description,
         hasMedicalRecord: data.haveMedicalCondition,
         medicalNotes: data.conditionRemarks === null ? '' : data.conditionRemarks,
+        documents: data.documents,
       };
-
       return student;
     } catch (error) {
       history.push({ pathname: `/setup/students` });
@@ -49,6 +49,17 @@ export const getStudent = createAsyncThunk(
 export const addStudent = createAsyncThunk(
   'setupApp/students/addStudent',
   async (student, { dispatch, getState }) => {
+    const documents = [];
+    student.documents.forEach((elt) => {
+      documents.push({
+        docName: elt.docName,
+        docTypeId: elt.docTypeId,
+        docUrl: elt.docUrl,
+        docDesc: '',
+        startDate: elt.startDate,
+        endDate: elt.endDate,
+      });
+    });
     const newStudent = {
       code: student.code,
       firstName: student.firstName,
@@ -73,7 +84,10 @@ export const addStudent = createAsyncThunk(
       haveMedicalCondition: student.hasMedicalRecord,
       conditionRemarks: student.hasMedicalRecord ? student.medicalNotes : '',
       description: student.description,
+      documents,
     };
+
+    console.log(newStudent);
 
     const response = await axios.post('/api/students', newStudent);
 
@@ -86,6 +100,18 @@ export const addStudent = createAsyncThunk(
 export const updateStudent = createAsyncThunk(
   'setupApp/students/updateStudent',
   async (student, { dispatch, getState }) => {
+    const documents = [];
+    student.documents.forEach((elt) => {
+      documents.push({
+        docName: elt.docName,
+        docTypeId: elt.docTypeId,
+        docUrl: elt.docUrl,
+        docDesc: '',
+        startDate: elt.startDate,
+        endDate: elt.endDate,
+      });
+    });
+
     const oldStudent = {
       id: student.studentId,
       code: student.code,
@@ -112,8 +138,10 @@ export const updateStudent = createAsyncThunk(
       haveMedicalCondition: student.hasMedicalRecord,
       conditionRemarks: student.hasMedicalRecord ? student.medicalNotes : '',
       description: student.description,
+      documents,
     };
 
+    console.log(oldStudent);
     const response = await axios.put(`/api/students/${student.studentId}`, oldStudent);
 
     const data = await response.data;

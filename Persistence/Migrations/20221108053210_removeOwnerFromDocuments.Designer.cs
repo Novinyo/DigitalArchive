@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221108053210_removeOwnerFromDocuments")]
+    partial class removeOwnerFromDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,6 +164,7 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("FatherEmail")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -187,6 +190,7 @@ namespace Persistence.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("MotherEmail")
+                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
@@ -246,15 +250,13 @@ namespace Persistence.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<Guid>("DocumentTypeId")
+                    b.Property<Guid?>("DocumentTypeId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DocumentURL")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                        .HasMaxLength(800)
+                        .HasColumnType("nvarchar(800)");
 
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("datetime2");
@@ -270,9 +272,6 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("StaffId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("StudentId")
                         .HasColumnType("uniqueidentifier");
@@ -884,21 +883,17 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.DocumentType", "DocumentType")
                         .WithMany()
-                        .HasForeignKey("DocumentTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("DocumentTypeId");
 
                     b.HasOne("Domain.Staff", null)
                         .WithMany("Documents")
                         .HasForeignKey("StaffId");
 
-                    b.HasOne("Domain.Student", "Student")
+                    b.HasOne("Domain.Student", null)
                         .WithMany("Documents")
                         .HasForeignKey("StudentId");
 
                     b.Navigation("DocumentType");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("Domain.School", b =>

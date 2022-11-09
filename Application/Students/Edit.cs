@@ -78,6 +78,12 @@ namespace Application.Students
                         return Result<StudentDto>.Failure("No matching contact found",
                         (int)HttpStatusCode.NotFound);
 
+                    var documents = await _context.Documents.
+                        Where(x => x.StudentId == student.Id).ToListAsync(cancellationToken);
+
+                    _context.Documents.RemoveRange(documents);
+                    
+                    await _context.SaveChangesAsync();
                     var contact = student.Contact;
 
                     _mapper.Map(request.Student.Contact, contact);
@@ -95,7 +101,18 @@ namespace Application.Students
                         student.ModifiedBy = userId;
                         student.School = school;
                     }
+                    
 
+                    foreach (var document in student.Documents)
+                    {
+                        document.Active = true;
+                        document.CreatedBy = userId;
+                        document.CreatedAt = DateTime.UtcNow;
+                        document.StudentId = student.Id;
+                        document.Id = Guid.NewGuid();
+
+                        _context.Documents.Add(document);
+                    }
                     var result = await _context.SaveChangesAsync() > 0;
 
                     if (!result) return Result<StudentDto>.Failure("Failed to update student",

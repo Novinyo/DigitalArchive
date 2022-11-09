@@ -40,14 +40,8 @@ const schema = yup.object().shape({
   faLName: yup.string().required("Father's last name is required"),
   moFName: yup.string().required("Mother's first name is required"),
   moLName: yup.string().required("Mother's last name is required"),
-  faEmail: yup
-    .string()
-    .email('You must enter a valid email')
-    .required("Father's email is required"),
-  moEmail: yup
-    .string()
-    .email('You must enter a valid email')
-    .required("Mother's email is required"),
+  faEmail: yup.string().email('You must enter a valid email'),
+  moEmail: yup.string().email('You must enter a valid email'),
   faPhone: yup.string().required("Father's phone number is required"),
   moPhone: yup.string().required("Mother's phone number is required"),
   birthdate: yup
@@ -59,7 +53,7 @@ const schema = yup.object().shape({
     .max(new Date(), 'Student entrance date cannot be in the future')
     .required('You must select a hire date'),
   emergencyContact: yup.string().required('Kindly provide an emergency contact'),
-  documents: yup.array().min(1, 'Select at least one document'),
+  documents: yup.array().min(1),
 });
 
 const StudentForm = (props) => {
@@ -96,12 +90,10 @@ const StudentForm = (props) => {
   function onSubmit(data) {
     if (routeParams.id === 'new') {
       dispatch(addStudent(data)).then(({ payload }) => {
-        console.log(payload);
         navigate(`/setup/students/${payload.id}`);
       });
     } else {
       dispatch(updateStudent(data, routeParams.id)).then(({ payload }) => {
-        console.log(payload);
         navigate(`/setup/students/${payload.id}`);
       });
     }

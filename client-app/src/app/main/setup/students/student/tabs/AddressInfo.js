@@ -8,12 +8,13 @@ import { useState, useEffect } from 'react';
 
 function AddressInfo(props) {
   const methods = useFormContext();
-  const { control, formState } = methods;
-  const { isValid, dirtyFields, errors } = formState;
+  const { control, formState, getValues } = methods;
+  const { isValid, errors } = formState;
 
   useEffect(() => {
-    setCanView(control._defaultValues.hasMedicalRecord);
+    setCanView(getValues('hasMedicalRecord'));
   }, []);
+
   const [canView, setCanView] = useState(false);
 
   const handleSwitch = (evt) => {

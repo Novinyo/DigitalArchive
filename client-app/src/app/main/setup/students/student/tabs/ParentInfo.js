@@ -62,31 +62,6 @@ function ParentInfo(props) {
       />
       <Controller
         control={control}
-        name="faEmail"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className="mt-32"
-            label="Father's Email"
-            placeholder="Email"
-            variant="outlined"
-            id="faEmail"
-            required
-            fullWidth
-            error={!!errors.faEmail}
-            helperText={errors?.faEmail?.message}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>
-                </InputAdornment>
-              ),
-            }}
-          />
-        )}
-      />
-      <Controller
-        control={control}
         name="faPhone"
         render={({ field }) => (
           <TextField
@@ -104,6 +79,30 @@ function ParentInfo(props) {
               startAdornment: (
                 <InputAdornment position="start">
                   <FuseSvgIcon size={20}>heroicons-solid:phone</FuseSvgIcon>
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="faEmail"
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className="mt-32"
+            label="Father's Email"
+            placeholder="Email"
+            variant="outlined"
+            id="faEmail"
+            fullWidth
+            error={!!errors.faEmail}
+            helperText={errors?.faEmail?.message}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>
                 </InputAdornment>
               ),
             }}
@@ -162,31 +161,6 @@ function ParentInfo(props) {
       />
       <Controller
         control={control}
-        name="moEmail"
-        render={({ field }) => (
-          <TextField
-            {...field}
-            className="mt-32"
-            label="Mother's Email"
-            placeholder="Email"
-            variant="outlined"
-            id="moEmail"
-            required
-            fullWidth
-            error={!!errors.moEmail}
-            helperText={errors?.moEmail?.message}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>
-                </InputAdornment>
-              ),
-            }}
-          />
-        )}
-      />
-      <Controller
-        control={control}
         name="moPhone"
         render={({ field }) => (
           <TextField
@@ -204,6 +178,30 @@ function ParentInfo(props) {
               startAdornment: (
                 <InputAdornment position="start">
                   <FuseSvgIcon size={20}>heroicons-solid:phone</FuseSvgIcon>
+                </InputAdornment>
+              ),
+            }}
+          />
+        )}
+      />
+      <Controller
+        control={control}
+        name="moEmail"
+        render={({ field }) => (
+          <TextField
+            {...field}
+            className="mt-32"
+            label="Mother's Email"
+            placeholder="Email"
+            variant="outlined"
+            id="moEmail"
+            fullWidth
+            error={!!errors.moEmail}
+            helperText={errors?.moEmail?.message}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <FuseSvgIcon size={20}>heroicons-solid:mail</FuseSvgIcon>
                 </InputAdornment>
               ),
             }}

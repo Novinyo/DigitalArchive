@@ -10,9 +10,11 @@ namespace Domain
         public string Name { get; set; }
         public string Description { get; set; }
         public DocumentType DocumentType { get; set; }
-        public Guid OwnerId { get; set; }
-        public int OwnerType { get; set; }
+        public Guid DocumentTypeId { get; set; }
         public string DocumentURL { get; set; }
-    
+        public Student Student { get; set; }
+        public Guid? StudentId { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }

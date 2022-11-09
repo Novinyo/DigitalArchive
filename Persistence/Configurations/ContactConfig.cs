@@ -22,8 +22,8 @@ namespace Persistence.Configurations
             builder.Property(x => x.FatherLastName).HasMaxLength(50);
             builder.Property(x => x.MotherFirstName).IsRequired().HasMaxLength(50);
             builder.Property(x => x.MotherLastName).IsRequired().HasMaxLength(50);
-            builder.Property(x => x.FatherEmail).HasMaxLength(256).IsRequired();
-            builder.Property(x => x.MotherEmail).HasMaxLength(256).IsRequired();
+            builder.Property(x => x.FatherEmail).HasMaxLength(256);
+            builder.Property(x => x.MotherEmail).HasMaxLength(256);
             builder.Property(x => x.EmergencyContact).HasMaxLength(50).IsRequired();
             builder.Property(x => x.PostalAddress).HasMaxLength(200);
             builder.Property(x => x.StreetAddress).HasMaxLength(200);
